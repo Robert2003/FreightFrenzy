@@ -24,8 +24,7 @@ public class ArmTeleOP extends OpMode {
 
     double drive, strafe, rotate;
     double rearLeftPower, frontLeftPower, rearRightPower, frontRightPower;
-
-    boolean doOnce = true;
+    double suppress;
 
     @Override
     public void init() {
@@ -62,11 +61,12 @@ public class ArmTeleOP extends OpMode {
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
 
-        if(gamepad1.right_bumper){
-            rearLeftPower *= 0.3;
-            rearRightPower *= 0.3;
-            frontLeftPower *= 0.3;
-            frontRightPower *= 0.3;
+        if(gamepad1.right_trigger != 0){
+            suppress = 1 - gamepad1.right_trigger * 0.7;
+            rearLeftPower *= suppress;
+            rearRightPower *= suppress;
+            frontLeftPower *= suppress;
+            frontRightPower *= suppress;
         }
 
         rearLeftMotor.setPower(rearLeftPower);
@@ -75,13 +75,13 @@ public class ArmTeleOP extends OpMode {
         frontRightMotor.setPower(frontRightPower);
 
 
-        if (gamepad1.a)
+        if (gamepad2.a)
         {
             plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             plateMotor.setPower(0.1);
             platePosition = plateMotor.getCurrentPosition();
         }
-        else if (gamepad1.b)
+        else if (gamepad2.b)
         {
             plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             plateMotor.setPower(-0.1);
@@ -94,13 +94,13 @@ public class ArmTeleOP extends OpMode {
             plateMotor.setPower(0.3);
         }
 
-        if (gamepad1.right_bumper)
+        if (gamepad2.right_bumper)
         {
             armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             armMotor.setPower(0.3);
             armPosition = armMotor.getCurrentPosition();
         }
-        else if (gamepad1.left_bumper)
+        else if (gamepad2.left_bumper)
         {
             armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             armMotor.setPower(-0.3);
