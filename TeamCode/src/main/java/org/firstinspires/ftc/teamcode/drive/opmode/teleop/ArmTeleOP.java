@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -17,12 +18,26 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class ArmTeleOP extends OpMode {
 
     DcMotorEx plateMotor, armMotor;
+    DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
+
     int platePosition, armPosition;
+
+    double drive, strafe, rotate;
+    double rearLeftPower, frontLeftPower, rearRightPower, frontRightPower;
+
+    boolean doOnce = true;
 
     @Override
     public void init() {
         plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
         armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
+        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
+        frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+        rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
+        rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
+
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         plateMotor.setZeroPowerBehavior(BRAKE);
         armMotor.setZeroPowerBehavior(BRAKE);
@@ -33,79 +48,69 @@ public class ArmTeleOP extends OpMode {
 
     @Override
     public void loop() {
-        /**if (gamepad1.a) {
-            plateMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            plateMotor.setVelocity(25);
-        } else if (gamepad1.b) {
-            plateMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-            plateMotor.setVelocity(25);
-        } else
-            plateMotor.setVelocity(0);
-        if (gamepad1.right_bumper) {
-            armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            armMotor.setVelocity(25);
-        } else if (gamepad1.left_bumper) {
-            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-            armMotor.setVelocity(25);
-        } else
-            armMotor.setVelocity(0);
-         */
-        if(gamepad1.a || gamepad1.b || gamepad1.right_bumper || gamepad1.left_bumper)
+        drive = -gamepad1.right_stick_y;
+        strafe = gamepad1.right_stick_x;
+        rotate = -gamepad1.right_trigger + gamepad1.left_trigger;
+
+        rearLeftPower = -strafe - drive + rotate;
+        frontLeftPower = strafe + drive + rotate;
+        rearRightPower = strafe - drive - rotate;
+        frontRightPower = -strafe + drive - rotate;
+
+        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
+        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
+        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
+        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
+
+        if(gamepad1.right_bumper){
+            rearLeftPower *= 0.3;
+            rearRightPower *= 0.3;
+            frontLeftPower *= 0.3;
+            frontRightPower *= 0.3;
+        }
+
+        rearLeftMotor.setPower(rearLeftPower);
+        rearRightMotor.setPower(rearRightPower);
+        frontLeftMotor.setPower(frontLeftPower);
+        frontRightMotor.setPower(frontRightPower);
+
+
+        if (gamepad1.a)
         {
             plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            if (gamepad1.a)
-                plateMotor.setPower(0.1);
-            else if (gamepad1.b)
-                plateMotor.setPower(-0.1);
-
-            if (gamepad1.right_bumper)
-                armMotor.setPower(0.1);
-            else if (gamepad1.left_bumper)
-                armMotor.setPower(-0.1);
-
+            plateMotor.setPower(0.1);
             platePosition = plateMotor.getCurrentPosition();
+        }
+        else if (gamepad1.b)
+        {
+            plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            plateMotor.setPower(-0.1);
+            platePosition = plateMotor.getCurrentPosition();
+        }
+        else
+        {
+            plateMotor.setTargetPosition(platePosition);
+            plateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            plateMotor.setPower(0.3);
+        }
+
+        if (gamepad1.right_bumper)
+        {
+            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armMotor.setPower(0.3);
+            armPosition = armMotor.getCurrentPosition();
+        }
+        else if (gamepad1.left_bumper)
+        {
+            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armMotor.setPower(-0.3);
             armPosition = armMotor.getCurrentPosition();
         }
         else
         {
-            //plateMotor.setPower(0);
-            //armMotor.setPower(0);
-
-            telemetry.addData("Pozitie din variabila:", platePosition);
-            telemetry.addData("Pozitie din motor:", plateMotor.getCurrentPosition());
-            telemetry.addData("Pozitie din variabila:", armPosition);
-            telemetry.addData("Pozitie din motor:", armMotor.getCurrentPosition());
-            telemetry.update();
-
-            plateMotor.setTargetPosition(platePosition);
-            plateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            plateMotor.setPower(0.1);
-
             armMotor.setTargetPosition(armPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(0.1);
+            armMotor.setPower(0.3);
         }
     }
-
-    /*
-    @Override
-    public void runOpMode() throws InterruptedException {
-
-        while (!isStopRequested() && opModeIsActive()) {
-            if (gamepad1.a)
-                plateMotor.setPower(0.1);
-            if (gamepad1.right_bumper) {
-                //armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-                armMotor.setPower(0.1);
-            } else if (gamepad1.left_bumper) {
-                //armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-                armMotor.setPower(-0.1);
-            }
-        }
-
-    }
-    */
-
 }
