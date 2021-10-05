@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -19,12 +20,13 @@ public class ArmTeleOP extends OpMode {
 
     DcMotorEx plateMotor, armMotor;
     DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
+    Servo excavator;
 
     int platePosition, armPosition;
 
     double drive, strafe, rotate;
     double rearLeftPower, frontLeftPower, rearRightPower, frontRightPower;
-    double suppress;
+    double servoPos = 0;
 
     @Override
     public void init() {
@@ -35,6 +37,8 @@ public class ArmTeleOP extends OpMode {
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "rearLeftMotor");
         rearRightMotor = hardwareMap.get(DcMotorEx.class, "rearRightMotor");
 
+        excavator = hardwareMap.get(Servo.class, "servo");
+
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -43,12 +47,13 @@ public class ArmTeleOP extends OpMode {
 
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
     }
 
     @Override
     public void loop() {
-        drive = -gamepad1.right_stick_y;
-        strafe = gamepad1.right_stick_x;
+        drive = -gamepad1.right_stick_x;
+        strafe = -gamepad1.right_stick_y;
         rotate = -gamepad1.right_trigger + gamepad1.left_trigger;
 
         rearLeftPower = -strafe - drive + rotate;
@@ -61,12 +66,17 @@ public class ArmTeleOP extends OpMode {
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
 
-        if(gamepad1.right_trigger != 0){
-            suppress = 1 - gamepad1.right_trigger * 0.7;
-            rearLeftPower *= suppress;
-            rearRightPower *= suppress;
-            frontLeftPower *= suppress;
-            frontRightPower *= suppress;
+        if(gamepad1.left_bumper){
+            rearLeftPower *= 0.7;
+            rearRightPower *= 0.7;
+            frontLeftPower *= 0.7;
+            frontRightPower *= 0.7;
+        }
+        if (gamepad1.right_bumper) {
+            rearLeftPower *= 0.3;
+            rearRightPower *= 0.3;
+            frontLeftPower *= 0.3;
+            frontRightPower *= 0.3;
         }
 
         rearLeftMotor.setPower(rearLeftPower);
@@ -75,42 +85,46 @@ public class ArmTeleOP extends OpMode {
         frontRightMotor.setPower(frontRightPower);
 
 
-        if (gamepad2.a)
-        {
-            plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            plateMotor.setPower(0.1);
+        if (gamepad2.right_stick_x != 0) {
+            plateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            plateMotor.setVelocity(120 * gamepad2.right_stick_x);
             platePosition = plateMotor.getCurrentPosition();
-        }
-        else if (gamepad2.b)
-        {
-            plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            plateMotor.setPower(-0.1);
-            platePosition = plateMotor.getCurrentPosition();
-        }
-        else
-        {
+        } else {
             plateMotor.setTargetPosition(platePosition);
             plateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            plateMotor.setPower(0.3);
+            plateMotor.setVelocity(200);
         }
 
-        if (gamepad2.right_bumper)
-        {
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            armMotor.setPower(0.3);
+        if (gamepad2.left_trigger != 0) {
+            armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            armMotor.setVelocity(170);
             armPosition = armMotor.getCurrentPosition();
-        }
-        else if (gamepad2.left_bumper)
-        {
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            armMotor.setPower(-0.3);
+        } else if (gamepad2.right_trigger != 0) {
+            armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+            armMotor.setVelocity(170);
             armPosition = armMotor.getCurrentPosition();
-        }
-        else
-        {
+        } else {
             armMotor.setTargetPosition(armPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(0.3);
+            armMotor.setVelocity(100);
         }
+
+        if (gamepad2.dpad_left) {
+            servoPos = 1.0;
+        } else if (gamepad2.dpad_right)
+            servoPos = 0;
+        excavator.setPosition(servoPos);
+
+        telemetry.addData("Excavator target", servoPos);
+        telemetry.addData("Excavator actual", excavator.getPosition());
+        telemetry.addData("Arm position", armMotor.getCurrentPosition());
+        telemetry.addData("Arm RunMode", armMotor.getMode());
+        telemetry.addData("Plate position", plateMotor.getCurrentPosition());
+        telemetry.addData("Plate power", plateMotor.getPower());
+        telemetry.addData("Plate RunMode", plateMotor.getMode());
+        telemetry.update();
+
     }
 }
