@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 @TeleOp(group = "drive")
 public class ArmTeleOP extends OpMode {
 
-    DcMotorEx plateMotor, armMotor;
+    DcMotorEx armMotor;
     DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
     Servo excavator;
 
@@ -30,7 +30,7 @@ public class ArmTeleOP extends OpMode {
 
     @Override
     public void init() {
-        plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
+        //plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
         armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
@@ -42,10 +42,10 @@ public class ArmTeleOP extends OpMode {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        plateMotor.setZeroPowerBehavior(BRAKE);
+        //plateMotor.setZeroPowerBehavior(BRAKE);
         armMotor.setZeroPowerBehavior(BRAKE);
 
-        plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
@@ -66,7 +66,7 @@ public class ArmTeleOP extends OpMode {
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
 
-        if(gamepad1.left_bumper){
+        if (gamepad1.left_bumper) {
             rearLeftPower *= 0.7;
             rearRightPower *= 0.7;
             frontLeftPower *= 0.7;
@@ -84,7 +84,7 @@ public class ArmTeleOP extends OpMode {
         frontLeftMotor.setPower(frontLeftPower);
         frontRightMotor.setPower(frontRightPower);
 
-
+        /*
         if (gamepad2.right_stick_x != 0) {
             plateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             plateMotor.setVelocity(120 * gamepad2.right_stick_x);
@@ -93,23 +93,43 @@ public class ArmTeleOP extends OpMode {
             plateMotor.setTargetPosition(platePosition);
             plateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             plateMotor.setVelocity(200);
+
         }
+        */
+
 
         if (gamepad2.left_trigger != 0) {
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            armMotor.setVelocity(170);
+            armMotor.setPower(0.5);
             armPosition = armMotor.getCurrentPosition();
         } else if (gamepad2.right_trigger != 0) {
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-            armMotor.setVelocity(170);
+            armMotor.setPower(0.5);
             armPosition = armMotor.getCurrentPosition();
         } else {
             armMotor.setTargetPosition(armPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setVelocity(100);
+            armMotor.setPower(1);
         }
+
+        if (gamepad2.dpad_up) {
+            armMotor.setTargetPosition(400);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(0.4);
+            armPosition = 400;
+        } else if (gamepad2.dpad_down) {
+            armMotor.setTargetPosition(0);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(0.4);
+            armPosition = 0;
+        } else {
+            armMotor.setTargetPosition(armPosition);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(1);
+        }
+
 
         if (gamepad2.dpad_left) {
             servoPos = 1.0;
@@ -121,9 +141,11 @@ public class ArmTeleOP extends OpMode {
         telemetry.addData("Excavator actual", excavator.getPosition());
         telemetry.addData("Arm position", armMotor.getCurrentPosition());
         telemetry.addData("Arm RunMode", armMotor.getMode());
+        /*
         telemetry.addData("Plate position", plateMotor.getCurrentPosition());
         telemetry.addData("Plate power", plateMotor.getPower());
         telemetry.addData("Plate RunMode", plateMotor.getMode());
+         */
         telemetry.update();
 
     }
