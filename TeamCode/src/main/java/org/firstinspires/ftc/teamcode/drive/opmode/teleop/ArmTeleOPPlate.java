@@ -136,26 +136,26 @@ public class ArmTeleOPPlate extends OpMode {
 
         //CLAW
         /**if (gamepad2.dpad_left)
-        {
-            if(!pressed)
-            {
-                servoPos += 0.05;
-                pressed = true;
-            }
-        } else if (gamepad2.dpad_right)
-        {
-            if(!pressed)
-            {
-                servoPos -=0.05;
-                pressed = true;
-            }
-        }
-        else
-            pressed = false;
-        if(servoPos<0)
-                servoPos = 0;
-        if(servoPos>1)
-            servoPos = 1;*/
+         {
+         if(!pressed)
+         {
+         servoPos += 0.05;
+         pressed = true;
+         }
+         } else if (gamepad2.dpad_right)
+         {
+         if(!pressed)
+         {
+         servoPos -=0.05;
+         pressed = true;
+         }
+         }
+         else
+         pressed = false;
+         if(servoPos<0)
+         servoPos = 0;
+         if(servoPos>1)
+         servoPos = 1;*/
         if(gamepad2.dpad_left)
             servoPos = 0;
         else if(gamepad2.dpad_right)
