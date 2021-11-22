@@ -81,16 +81,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        //createArmPositions();
     }
-
-    /**private void createArmPositions() {
-        armPositions.put(ArmLevel.ZERO, 0);
-        armPositions.put(ArmLevel.LOW, 300);
-        armPositions.put(ArmLevel.MID, 1000);
-        armPositions.put(ArmLevel.HIGH, 1500);
-        armPositions.put(ArmLevel.CAP, 1700);
-    }*/
 
     private void run() {
         controlDriving();
@@ -159,6 +150,9 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             moveTargets.remove();
     }
 
+    boolean armSuppress;
+    double armPower, platePower;
+
     private void controlArm() {
         executeCurrentMoveTarget();
         MoveTarget currentTarget;
@@ -219,5 +213,34 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             currentTarget = new MoveTarget(plateMotor, 2900);
             moveTargets.add(currentTarget);
         }
+
+        /*
+
+        armSuppress = gamepad2.right_bumper;
+
+        if(gamepad2.right_stick_y != 0){
+            moveTargets.clear();
+            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armPower = (armSuppress ? .25 : .8);
+            if(gamepad2.right_stick_y > 0)
+                armPower *= -1;
+            armMotor.setPower(armPower);
+        } else
+            armMotor.setPower(0);
+
+        if (gamepad2.right_stick_x != 0) {
+            moveTargets.clear();
+            plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            platePower = (armSuppress ? .25 : .8);
+            if(gamepad2.right_stick_x > 0)
+                platePower *= -1;
+            plateMotor.setPower(platePower);
+        } else
+            plateMotor.setPower(0);
+
+
+         */
+        //INCEARCA RUN WITH ENCODER
+
     }
 }
