@@ -26,7 +26,6 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     double drive, strafe, rotate;
     double rearLeftPower, frontLeftPower, rearRightPower, frontRightPower;
     double servoPos = 0;
-    boolean isUpRight = false, isUpLeft = false, releasedDpad = true;
 
     private class MoveTarget {
         private DcMotorEx motor;
@@ -87,6 +86,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         controlDriving();
         controlClaw();
         controlArm();
+        debugTelemetry();
     }
 
     private void controlClaw() {
@@ -98,7 +98,9 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     }
 
     private void debugTelemetry() {
-
+        telemetry.addData("Queue size", moveTargets.size());
+        if(moveTargets.size() > 0)
+            telemetry.addData("Queue front motor", moveTargets.peek().getMotor().getPower());
         telemetry.update();
     }
 
@@ -165,21 +167,21 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         }
         else if(gamepad2.x) {
             moveTargets.clear();
-            currentTarget = new MoveTarget(armMotor, 600);
+            currentTarget = new MoveTarget(armMotor, 430); //600
             moveTargets.add(currentTarget);
             currentTarget = new MoveTarget(plateMotor, -2900);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.b){
             moveTargets.clear();
-            currentTarget = new MoveTarget(armMotor, 1000);
+            currentTarget = new MoveTarget(armMotor, 800); // 1000
             moveTargets.add(currentTarget);
             currentTarget = new MoveTarget(plateMotor, -2900);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.y){
             moveTargets.clear();
-            currentTarget = new MoveTarget(armMotor, 1660);
+            currentTarget = new MoveTarget(armMotor, 1160); //1660
             moveTargets.add(currentTarget);
             currentTarget = new MoveTarget(plateMotor, -2900);
             moveTargets.add(currentTarget);
@@ -214,7 +216,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             moveTargets.add(currentTarget);
         }
 
-        /*
+
 
         armSuppress = gamepad2.right_bumper;
 
@@ -225,7 +227,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             if(gamepad2.right_stick_y > 0)
                 armPower *= -1;
             armMotor.setPower(armPower);
-        } else
+        } else if(armMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER)
             armMotor.setPower(0);
 
         if (gamepad2.right_stick_x != 0) {
@@ -235,12 +237,8 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             if(gamepad2.right_stick_x > 0)
                 platePower *= -1;
             plateMotor.setPower(platePower);
-        } else
+        } else if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER)
             plateMotor.setPower(0);
-
-
-         */
-        //INCEARCA RUN WITH ENCODER
 
     }
 }
