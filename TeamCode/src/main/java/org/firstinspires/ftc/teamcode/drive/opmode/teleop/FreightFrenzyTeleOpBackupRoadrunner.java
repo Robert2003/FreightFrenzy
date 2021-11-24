@@ -69,8 +69,8 @@ public class FreightFrenzyTeleOpBackupRoadrunner extends LinearOpMode {
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        ((DcMotorEx)hardwareMap.get("rightRear")).setDirection(DcMotorSimple.Direction.REVERSE);
-        ((DcMotorEx)hardwareMap.get("leftFront")).setDirection(DcMotorSimple.Direction.REVERSE);
+        ((DcMotorEx)hardwareMap.get("rightRear")).setDirection(DcMotorSimple.Direction.FORWARD);
+        ((DcMotorEx)hardwareMap.get("leftFront")).setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     private void run() {
