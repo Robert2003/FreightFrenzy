@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode.teleop;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,21 +11,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import java.util.HashMap;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
-import java.util.Stack;
 
 @TeleOp(group = "drive")
-public class FreightFrenzyTeleOp extends LinearOpMode {
+public class FreightFrenzyTeleOpBackupRoadrunner extends LinearOpMode {
 
     DcMotorEx armMotor, plateMotor;
-    DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
     Servo excavator;
 
-    double drive, strafe, rotate;
-    double rearLeftPower, frontLeftPower, rearRightPower, frontRightPower;
+    SampleMecanumDrive mecanumDrive;
+    double suppressedPower;
+
     double servoPos = 0;
 
     private class MoveTarget {
@@ -49,6 +49,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        mecanumDrive = new SampleMecanumDrive(hardwareMap);
         initialization();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
@@ -59,27 +60,17 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     private void initialization() {
         plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
         armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
-        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
-        frontRightMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
-        rearLeftMotor = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rearRightMotor = hardwareMap.get(DcMotorEx.class, "rightRear");
 
         excavator = hardwareMap.get(Servo.class, "servo");
-
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         plateMotor.setZeroPowerBehavior(BRAKE);
         armMotor.setZeroPowerBehavior(BRAKE);
 
-        frontLeftMotor.setZeroPowerBehavior(BRAKE);
-        frontRightMotor.setZeroPowerBehavior(BRAKE);
-        rearLeftMotor.setZeroPowerBehavior(BRAKE);
-        rearRightMotor.setZeroPowerBehavior(BRAKE);
-
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        ((DcMotorEx)hardwareMap.get("rightRear")).setDirection(DcMotorSimple.Direction.REVERSE);
+        ((DcMotorEx)hardwareMap.get("leftFront")).setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void run() {
@@ -105,37 +96,20 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     }
 
     private void controlDriving() {
-        drive = -gamepad1.right_stick_x;
-        strafe = -gamepad1.right_stick_y;
-        rotate = -gamepad1.right_trigger + gamepad1.left_trigger;
+        suppressedPower = 1;
+        if(gamepad1.right_bumper)
+            suppressedPower *= .5;
+        if(gamepad1.left_bumper)
+            suppressedPower *= .3;
 
-        rearLeftPower = -strafe - drive + rotate;
-        frontLeftPower = strafe + drive + rotate;
-        rearRightPower = strafe - drive - rotate;
-        frontRightPower = -strafe + drive - rotate;
+        mecanumDrive.setWeightedDrivePower(
+                new Pose2d(
+                        gamepad1.right_stick_y * suppressedPower,
+                        gamepad1.right_stick_x * suppressedPower,
+                        (-gamepad1.right_trigger + gamepad1.left_trigger) * suppressedPower
+                )
+        );
 
-        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
-        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
-        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
-        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
-
-        if (gamepad1.right_bumper) {
-            rearLeftPower *= 0.5;
-            rearRightPower *= 0.5;
-            frontLeftPower *= 0.5;
-            frontRightPower *= 0.5;
-        }
-        if (gamepad1.left_bumper) {
-            rearLeftPower *= 0.3;
-            rearRightPower *= 0.3;
-            frontLeftPower *= 0.3;
-            frontRightPower *= 0.3;
-        }
-
-        rearLeftMotor.setPower(rearLeftPower);
-        rearRightMotor.setPower(rearRightPower);
-        frontLeftMotor.setPower(frontLeftPower);
-        frontRightMotor.setPower(frontRightPower);
     }
 
     private void executeCurrentMoveTarget() {
