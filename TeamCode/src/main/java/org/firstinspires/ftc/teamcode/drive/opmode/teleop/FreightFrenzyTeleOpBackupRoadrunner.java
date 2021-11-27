@@ -69,15 +69,14 @@ public class FreightFrenzyTeleOpBackupRoadrunner extends LinearOpMode {
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        ((DcMotorEx)hardwareMap.get("rightRear")).setDirection(DcMotorSimple.Direction.FORWARD);
-        ((DcMotorEx)hardwareMap.get("leftFront")).setDirection(DcMotorSimple.Direction.FORWARD);
+
     }
 
     private void run() {
         controlDriving();
         controlClaw();
         controlArm();
-        debugTelemetry();
+        //debugTelemetry();
     }
 
     private void controlClaw() {
@@ -101,15 +100,17 @@ public class FreightFrenzyTeleOpBackupRoadrunner extends LinearOpMode {
             suppressedPower *= .5;
         if(gamepad1.left_bumper)
             suppressedPower *= .3;
-
-        mecanumDrive.setWeightedDrivePower(
+        telemetry.addData("suppress", suppressedPower);
+        telemetry.addData("sticky", gamepad1.right_stick_y);
+        telemetry.addData("stickx", gamepad1.right_stick_x);
+        telemetry.update();
+        mecanumDrive.setDrivePower(
                 new Pose2d(
-                        gamepad1.right_stick_y * suppressedPower,
-                        gamepad1.right_stick_x * suppressedPower,
+                        -gamepad1.right_stick_y * suppressedPower,
+                        -gamepad1.right_stick_x * suppressedPower,
                         (-gamepad1.right_trigger + gamepad1.left_trigger) * suppressedPower
                 )
         );
-
     }
 
     private void executeCurrentMoveTarget() {

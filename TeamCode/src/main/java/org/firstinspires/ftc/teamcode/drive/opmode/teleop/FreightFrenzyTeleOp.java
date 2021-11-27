@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode.teleop;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,6 +30,8 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     double drive, strafe, rotate;
     double rearLeftPower, frontLeftPower, rearRightPower, frontRightPower;
     double servoPos = 0;
+
+    //SampleMecanumDrive mecanumDrive;
 
     private class MoveTarget {
         private DcMotorEx motor;
@@ -49,10 +55,24 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        SampleMecanumDrive mecanumDrive = new SampleMecanumDrive(hardwareMap);
         initialization();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
-            run();
+            telemetry.addData("leftsticky", -gamepad1.left_stick_y);
+            telemetry.addData("leftstickx", -gamepad1.left_stick_x);
+            telemetry.addData("rightstickx(heading)", -gamepad1.right_stick_x);
+            telemetry.update();
+
+            mecanumDrive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x,
+                            -gamepad1.right_stick_x
+                    )
+            );
+
+            mecanumDrive.update();
         }
     }
 
@@ -66,8 +86,8 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
 
         excavator = hardwareMap.get(Servo.class, "servo");
 
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         plateMotor.setZeroPowerBehavior(BRAKE);
         armMotor.setZeroPowerBehavior(BRAKE);
@@ -80,13 +100,15 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        //mecanumDrive = new SampleMecanumDrive(hardwareMap);
+        //mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
     }
 
     private void run() {
-        controlDriving();
-        controlClaw();
-        controlArm();
-        debugTelemetry();
+        //controlDriving();
+        //controlClaw();
+        //controlArm();
+        //debugTelemetry();
     }
 
     private void controlClaw() {
@@ -98,21 +120,32 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     }
 
     private void debugTelemetry() {
-        telemetry.addData("Queue size", moveTargets.size());
-        if(moveTargets.size() > 0)
-            telemetry.addData("Queue front motor", moveTargets.peek().getMotor().getPower());
-        telemetry.update();
+        //telemetry.addData("positionX", mecanumDrive.getPoseEstimate().getX());
+        //telemetry.addData("positionY", mecanumDrive.getPoseEstimate().getY());
+        //telemetry.update();
     }
 
     private void controlDriving() {
-        drive = -gamepad1.right_stick_x;
+        /**drive = gamepad1.right_stick_x;
         strafe = -gamepad1.right_stick_y;
         rotate = -gamepad1.right_trigger + gamepad1.left_trigger;
 
-        rearLeftPower = -strafe - drive + rotate;
+        telemetry.addData("drive", drive);
+        telemetry.addData("strafe", strafe);
+        telemetry.addData("rotate", rotate);
+        telemetry.update();
+
         frontLeftPower = strafe + drive + rotate;
-        rearRightPower = strafe - drive - rotate;
-        frontRightPower = -strafe + drive - rotate;
+        rearLeftPower = strafe + drive - rotate;
+        rearRightPower = strafe - drive + rotate;
+        frontRightPower = strafe - drive - rotate;
+
+        /*double powerFrontLeft = y + x + rx;
+        double powerFrontRight = y - x - rx;
+        double powerBackLeft = y - x + rx;
+        double powerBackRight = y + x - rx;
+
+
 
         rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
         rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
@@ -132,10 +165,28 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             frontRightPower *= 0.3;
         }
 
+        frontLeftMotor.setPower(frontLeftPower);
         rearLeftMotor.setPower(rearLeftPower);
         rearRightMotor.setPower(rearRightPower);
-        frontLeftMotor.setPower(frontLeftPower);
         frontRightMotor.setPower(frontRightPower);
+        */
+
+        SampleMecanumDrive mecanumDrive = new SampleMecanumDrive(hardwareMap);
+
+        telemetry.addData("leftsticky", -gamepad1.left_stick_y);
+        telemetry.addData("leftstickx", -gamepad1.left_stick_x);
+        telemetry.addData("rightstickx(heading)", -gamepad1.right_stick_x);
+        telemetry.update();
+
+        mecanumDrive.setWeightedDrivePower(
+                new Pose2d(
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x,
+                        -gamepad1.right_stick_x
+                )
+        );
+
+        mecanumDrive.update();
     }
 
     private void executeCurrentMoveTarget() {
