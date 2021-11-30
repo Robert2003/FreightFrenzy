@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 
@@ -24,8 +25,10 @@ import java.util.Stack;
 @TeleOp(group = "drive")
 public class FreightFrenzyTeleOp extends LinearOpMode {
 
+    RobotDefinition robot;
+
     DcMotorEx armMotor, plateMotor;
-    DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
+    //DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
     Servo excavator;
 
     double servoPos = 0;
@@ -65,14 +68,19 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     }
 
     private void initialization() {
-        plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
-        armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
+        robot = new RobotDefinition(hardwareMap);
+
+        plateMotor = robot.getPlateMotor();
+        armMotor = robot.getArmMotor();
+
+        /*
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
         rearLeftMotor = hardwareMap.get(DcMotorEx.class, "leftRear");
         rearRightMotor = hardwareMap.get(DcMotorEx.class, "rightRear");
+         */
 
-        excavator = hardwareMap.get(Servo.class, "servo");
+        excavator = robot.getExcavator();
 
         //frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         //rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -80,17 +88,13 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         plateMotor.setZeroPowerBehavior(BRAKE);
         armMotor.setZeroPowerBehavior(BRAKE);
 
-        frontLeftMotor.setZeroPowerBehavior(BRAKE);
-        frontRightMotor.setZeroPowerBehavior(BRAKE);
-        rearLeftMotor.setZeroPowerBehavior(BRAKE);
-        rearRightMotor.setZeroPowerBehavior(BRAKE);
-
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
         mecanumDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mecanumDrive.setZeroPowerBehavior(BRAKE);
     }
 
     private void run() {
