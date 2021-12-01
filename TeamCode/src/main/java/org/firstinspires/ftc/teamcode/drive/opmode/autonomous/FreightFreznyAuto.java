@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.opmode.autonomous.cases.Case1;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
@@ -15,28 +17,28 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class FreightFreznyAuto extends LinearOpMode {
 
     SampleMecanumDrive mecanumDrive;
-
-    Servo servo = hardwareMap.get(Servo.class, "servo");
+    RobotDefinition robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
         initialization();
         waitForStart();
-        runAuto();
+        new Case1(this).runAuto();
     }
 
     private void initialization(){
+        robot = new RobotDefinition(hardwareMap);
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
-        AutoUtil.setClawOpen(servo, false);
+        AutoUtil.setClawOpen(robot.getExcavator(), false);
     }
 
-    private void runAuto(){
-        TrajectorySequence trajSeq = mecanumDrive.trajectorySequenceBuilder(mecanumDrive.getPoseEstimate())
-                .forward(11.5)
-                .build();
-        mecanumDrive.followTrajectorySequence(trajSeq);
-        AutoUtil.setClawOpen(servo, true);
+    public RobotDefinition getRobot() {
+        return robot;
+    }
+
+    public SampleMecanumDrive getMecanumDrive() {
+        return mecanumDrive;
     }
 
 }

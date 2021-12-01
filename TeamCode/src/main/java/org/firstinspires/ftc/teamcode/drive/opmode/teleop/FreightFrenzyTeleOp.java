@@ -91,6 +91,8 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        mecanumDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
         mecanumDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -115,6 +117,12 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     private void debugTelemetry() {
         telemetry.addData("PoseX", mecanumDrive.getPoseEstimate().getX());
         telemetry.addData("PoseY", mecanumDrive.getPoseEstimate().getY());
+        telemetry.addData("Arm", armMotor.getCurrentPosition());
+        telemetry.addData("Plate", plateMotor.getCurrentPosition());
+        telemetry.addData("Encoder0", mecanumDrive.getWheelPositions().get(0));
+        telemetry.addData("Encoder1", mecanumDrive.getWheelPositions().get(1));
+        telemetry.addData("Encoder2", mecanumDrive.getWheelPositions().get(2));
+        telemetry.addData("Encoder3", mecanumDrive.getWheelPositions().get(3));
         telemetry.update();
     }
 
