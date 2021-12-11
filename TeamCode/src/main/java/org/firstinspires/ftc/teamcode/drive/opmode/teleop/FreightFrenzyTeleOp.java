@@ -91,9 +91,8 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        mecanumDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
+        mecanumDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
         mecanumDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mecanumDrive.setZeroPowerBehavior(BRAKE);
