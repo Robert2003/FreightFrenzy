@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode.teleop;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 

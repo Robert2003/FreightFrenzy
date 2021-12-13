@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.drive.opmode.autonomous.detection;
+package org.firstinspires.ftc.teamcode.autonomous.detection;
+
+import com.acmerobotics.dashboard.config.Config;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -11,6 +13,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
+@Config
 public class StageSwitchingPipeline extends OpenCvPipeline {
 
     Mat yCbCrChan2Mat = new Mat();
@@ -31,20 +34,33 @@ public class StageSwitchingPipeline extends OpenCvPipeline {
     //copiat
     //0 means skystone, 1 means yellow stone
     //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
-    private static int valMid = 0;
-    private static int valLeft = 0;
-    private static int valRight = 0;
+    public static int valMid = 0;
+    public static int valLeft = 0;
+    public static int valRight = 0;
 
-    private static float rectHeight = 1.5f/8f;
-    private static float rectWidth = .6f/8f;
+    private static float rectHeight = .6f/8f;
+    private static float rectWidth = 1.5f/8f;
 
-    private float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
-    private float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
+    public static double offsetX = 0.0/8.0;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
+    public static double offsetY = 0.0/8.0;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    private float[] midPos = {4.5f/8f+offsetX, 3.4f/8f+offsetY};//0 = col, 1 = row
-    private float[] leftPos = {4.5f/8f+offsetX, 1.4f/8f+offsetY};
-    private float[] rightPos = {4.5f/8f+offsetX, 5.2f/8f+offsetY};
+    //private float[] midPos = {4.5f/8f+offsetX, 3.4f/8f+offsetY};//0 = col, 1 = row
+    //private float[] leftPos = {4.5f/8f+offsetX, 1.4f/8f+offsetY};
+    //private float[] rightPos = {4.5f/8f+offsetX, 5.2f/8f+offsetY};
+
+    public static double[] midPos = {4/8.0+offsetX, 5.5/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPos = {2/8.0+offsetX, 5.5/8.0+offsetY};
+    public static double[] rightPos = {6/8.0+offsetX, 5.5/8.0+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
+    /**
+          -Deci pentru midPos, leftPos, rightPos, prima valoare, care e diferita la toate 3 inseamna
+     cat de in dreapta sau in stanga sunt dreptunghiurile. Valoare = 0.5, dreptunghiul e in mijloc pe OX,
+     daca e mai mare e mai la dreapta si daca e mai mica e mai la stanga
+
+          -Deci pentru midPos, leftPos, rightPos, a doua valoare, care e la fel la toate 3 inseamna
+     cat de sus sau jos sunt dreptunghiurile. Valoare = 0.5, dreptunghiul e in mijloc pe OY,
+     daca e mai mare e mai jos si daca e mai mica e mai sus
+     */
 
     @Override
     public void onViewportTapped()

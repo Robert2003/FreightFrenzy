@@ -1,12 +1,10 @@
-package org.firstinspires.ftc.teamcode.drive.opmode.autonomous.cases;
+package org.firstinspires.ftc.teamcode.autonomous.cases;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
-import org.firstinspires.ftc.teamcode.drive.opmode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.drive.opmode.autonomous.FreightFreznyAuto;
-import org.firstinspires.ftc.teamcode.drive.opmode.teleop.FreightFrenzyTeleOp;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
+import org.firstinspires.ftc.teamcode.autonomous.FreightFreznyAuto;
 
 public class Case1 {
 
