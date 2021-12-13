@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous.detection;
 
-import static org.firstinspires.ftc.teamcode.autonomous.detection.StageSwitchingPipeline.valLeft;
-import static org.firstinspires.ftc.teamcode.autonomous.detection.StageSwitchingPipeline.valMid;
-import static org.firstinspires.ftc.teamcode.autonomous.detection.StageSwitchingPipeline.valRight;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -19,6 +15,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class MakingDetection extends LinearOpMode {
 
     OpenCvCamera phoneCam;
+    StageSwitchingPipeline pipeline;
     private final int rows = 640;
     private final int cols = 480;
 
@@ -28,7 +25,9 @@ public class MakingDetection extends LinearOpMode {
         waitForStart();
         while(opModeIsActive())
         {
-            telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
+
+            telemetry.addData("Values", pipeline.valLeft+"   "+pipeline.valMid+"   "+
+                    pipeline.valRight);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
 
@@ -37,10 +36,11 @@ public class MakingDetection extends LinearOpMode {
     }
 
     private void initialize(){
+        pipeline = new StageSwitchingPipeline();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
         phoneCam.openCameraDevice();//open camera
-        phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
+        phoneCam.setPipeline(pipeline);//different stages
         phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
         FtcDashboard.getInstance().startCameraStream(phoneCam, 0);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
