@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 @TeleOp(group = "drive")
-public class FreightFrenzyTeleOp extends LinearOpMode {
+public class WheelCheckTeleOp extends LinearOpMode {
 
     RobotDefinition robot;
 
@@ -95,7 +95,6 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     private void run() {
         controlDriving();
         controlClaw();
-        controlArm();
         debugTelemetry();
     }
 
@@ -116,8 +115,6 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         telemetry.addData("Encoder1", mecanumDrive.getWheelPositions().get(1));
         telemetry.addData("Encoder2", mecanumDrive.getWheelPositions().get(2));
         telemetry.addData("Encoder3", mecanumDrive.getWheelPositions().get(3));
-        telemetry.addData("ArmMode", armMotor.getMode());
-        telemetry.addData("PlateMode", plateMotor.getMode());
         telemetry.update();
     }
 
@@ -167,19 +164,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         frontRightMotor.setPower(frontRightPower);
         */
 
-        swp = 1;
-        if(gamepad1.right_bumper)
-            swp *= .5;
-        if(gamepad1.left_bumper)
-            swp *= .3;
-        mecanumDrive.setWeightedDrivePower(
-                new Pose2d(
-                        -gamepad1.right_stick_y * swp,
-                        -gamepad1.right_stick_x * swp,
-                        (-gamepad1.right_trigger + gamepad1.left_trigger) * swp
-                )
-        );
-        mecanumDrive.update();
+        mecanumDrive.setMotorPowers(0, .3, .5, 1);
     }
 
     private void executeCurrentMoveTarget() {
@@ -219,23 +204,23 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         }
         else if(gamepad2.x) {
             resetTargets();
-            currentTarget = new MoveTarget(armMotor, -420); //600
+            currentTarget = new MoveTarget(armMotor, 430); //600
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
+            currentTarget = new MoveTarget(plateMotor, -2800);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.b){
             resetTargets();
-            currentTarget = new MoveTarget(armMotor, -855); // 1000
+            currentTarget = new MoveTarget(armMotor, 800); // 1000
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
+            currentTarget = new MoveTarget(plateMotor, -2800);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.y){
             resetTargets();
-            currentTarget = new MoveTarget(armMotor, -1300); //1660
+            currentTarget = new MoveTarget(armMotor, 1100); //1660
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
+            currentTarget = new MoveTarget(plateMotor, -2800);
             moveTargets.add(currentTarget);
         }
 
@@ -286,8 +271,11 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
                 armPower *= -1;
             armMotor.setPower(armPower);
             armPosition = armMotor.getCurrentPosition();
-        } else if(armMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER)
-            armMotor.setPower(0);
+        } else if(armMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+            armMotor.setTargetPosition(armPosition);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(1);
+        }
 
         if (gamepad2.right_stick_x != 0) {
             resetTargets();
@@ -297,8 +285,11 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
                 platePower *= -1;
             plateMotor.setPower(platePower);
             platePosition = plateMotor.getCurrentPosition();
-        } else if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER)
-            plateMotor.setPower(0);
+        } else if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+            plateMotor.setTargetPosition(platePosition);
+            plateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            plateMotor.setPower(1);
+        }
 
     }
 }

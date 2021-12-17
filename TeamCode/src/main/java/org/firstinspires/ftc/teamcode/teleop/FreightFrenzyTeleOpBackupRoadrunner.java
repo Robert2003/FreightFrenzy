@@ -207,7 +207,7 @@ public class FreightFrenzyTeleOpBackupRoadrunner extends LinearOpMode {
             moveTargets.clear();
             plateMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             platePower = (armSuppress ? .25 : .8);
-            if(gamepad2.right_stick_x > 0)
+            if(gamepad2.right_stick_x < 0)
                 platePower *= -1;
             plateMotor.setPower(platePower);
         } else if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER)

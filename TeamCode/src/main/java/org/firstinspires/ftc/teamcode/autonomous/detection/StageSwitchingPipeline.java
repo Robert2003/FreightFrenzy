@@ -34,9 +34,9 @@ public class StageSwitchingPipeline extends OpenCvPipeline {
     //copiat
     //0 means skystone, 1 means yellow stone
     //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
-    public int valMid = 0;
-    public int valLeft = 0;
-    public int valRight = 0;
+    public static int valMid = 0;
+    public static int valLeft = 0;
+    public static int valRight = 0;
 
     private static float rectHeight = .6f/8f;
     private static float rectWidth = 1.5f/8f;
@@ -53,11 +53,11 @@ public class StageSwitchingPipeline extends OpenCvPipeline {
     public static double[] rightPos = {6/8.0+offsetX, 5.5/8.0+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
     /**
-          -Deci pentru midPos, leftPos, rightPos, prima valoare, care e diferita la toate 3 inseamna
+     -Deci pentru midPos, leftPos, rightPos, prima valoare, care e diferita la toate 3 inseamna
      cat de in dreapta sau in stanga sunt dreptunghiurile. Valoare = 0.5, dreptunghiul e in mijloc pe OX,
      daca e mai mare e mai la dreapta si daca e mai mica e mai la stanga
 
-          -Deci pentru midPos, leftPos, rightPos, a doua valoare, care e la fel la toate 3 inseamna
+     -Deci pentru midPos, leftPos, rightPos, a doua valoare, care e la fel la toate 3 inseamna
      cat de sus sau jos sunt dreptunghiurile. Valoare = 0.5, dreptunghiul e in mijloc pe OY,
      daca e mai mare e mai jos si daca e mai mica e mai sus
      */
@@ -94,7 +94,6 @@ public class StageSwitchingPipeline extends OpenCvPipeline {
         //color diff cb.
         //lower cb = more blue = skystone = white
         //higher cb = less blue = yellow stone = grey
-
         Imgproc.cvtColor(input, yCbCrChan2Mat, Imgproc.COLOR_RGB2YCrCb);//converts rgb to ycrcb
         Core.extractChannel(yCbCrChan2Mat, yCbCrChan2Mat, 2);//takes cb difference and stores
 

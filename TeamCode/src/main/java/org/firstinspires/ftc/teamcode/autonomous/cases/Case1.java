@@ -4,15 +4,16 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.FreightFreznyAuto;
+import org.firstinspires.ftc.teamcode.autonomous.FreightFrenzyAuto;
+import org.firstinspires.ftc.teamcode.autonomous.FreightFreznyAutoOld;
 
 public class Case1 {
 
-    FreightFreznyAuto auto;
+    FreightFrenzyAuto auto;
 
     Trajectory traj1;
 
-    public Case1(FreightFreznyAuto auto){
+    public Case1(FreightFrenzyAuto auto){
         this.auto = auto;
         traj1 = auto.getMecanumDrive()
                 .trajectoryBuilder(auto.getMecanumDrive().getPoseEstimate())

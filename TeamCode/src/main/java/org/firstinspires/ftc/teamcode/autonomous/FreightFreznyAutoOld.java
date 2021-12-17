@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.autonomous.cases.Case1;
 
 
 @Autonomous
-public class FreightFreznyAuto extends LinearOpMode {
+public class FreightFreznyAutoOld extends LinearOpMode {
 
     SampleMecanumDrive mecanumDrive;
     RobotDefinition robot;
@@ -19,7 +19,7 @@ public class FreightFreznyAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         initialization();
         waitForStart();
-        new Case1(this).runAuto();
+        //new Case1(this).runAuto();
     }
 
     private void initialization(){
