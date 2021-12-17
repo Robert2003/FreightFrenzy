@@ -98,7 +98,8 @@ public class StageSwitchingPipeline extends OpenCvPipeline {
         Core.extractChannel(yCbCrChan2Mat, yCbCrChan2Mat, 2);//takes cb difference and stores
 
         //b&w
-        Imgproc.threshold(yCbCrChan2Mat, thresholdMat, 102, 255, Imgproc.THRESH_BINARY_INV);
+        Imgproc.threshold(yCbCrChan2Mat, thresholdMat, 50, 255, Imgproc.THRESH_BINARY_INV);
+        //thresh era 102
 
         //outline/contour
         Imgproc.findContours(thresholdMat, contoursList, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
