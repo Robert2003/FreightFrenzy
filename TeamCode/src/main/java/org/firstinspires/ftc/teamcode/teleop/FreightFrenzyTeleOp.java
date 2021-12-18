@@ -192,6 +192,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setPower(1);
 
+
         if (runtime.milliseconds() > 800) {
             moveTargets.remove();
             runtime.reset();
@@ -210,32 +211,32 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     private void controlArm() {
         executeCurrentMoveTarget();
         MoveTarget currentTarget;
-        if (gamepad2.a) {
+         if (gamepad2.a) {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 0);
+            currentTarget = new MoveTarget(armMotor, -15);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.x) {
             resetTargets();
             currentTarget = new MoveTarget(armMotor, -420); //600
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
+            currentTarget = new MoveTarget(plateMotor, 960);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.b){
             resetTargets();
             currentTarget = new MoveTarget(armMotor, -855); // 1000
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
+            currentTarget = new MoveTarget(plateMotor, 960);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.y){
             resetTargets();
-            currentTarget = new MoveTarget(armMotor, -1300); //1660
+            currentTarget = new MoveTarget(armMotor, -1350); //1660 -1300
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
+            currentTarget = new MoveTarget(plateMotor, 960);
             moveTargets.add(currentTarget);
         }
 
@@ -243,28 +244,28 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 0);
+            currentTarget = new MoveTarget(armMotor, 960);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_left) {
             resetTargets();
             currentTarget = new MoveTarget(armMotor, 600);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 2900);
+            currentTarget = new MoveTarget(plateMotor, 960);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_right){
             resetTargets();
             currentTarget = new MoveTarget(armMotor, 1000);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 2900);
+            currentTarget = new MoveTarget(plateMotor, 960);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_up){
             resetTargets();
             currentTarget = new MoveTarget(armMotor, 1660);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 2900);
+            currentTarget = new MoveTarget(plateMotor, 960);
             moveTargets.add(currentTarget);
         }
 

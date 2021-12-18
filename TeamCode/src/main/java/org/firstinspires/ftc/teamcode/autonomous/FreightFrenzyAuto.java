@@ -61,6 +61,8 @@ public class FreightFrenzyAuto extends LinearOpMode {
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
         AutoUtil.setClawOpen(robot.getExcavator(), false);
 
+
+
     }
 
     private void runAuto() {
