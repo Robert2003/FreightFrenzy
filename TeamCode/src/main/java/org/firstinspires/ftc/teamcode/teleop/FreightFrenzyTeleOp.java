@@ -118,6 +118,8 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         telemetry.addData("Encoder3", mecanumDrive.getWheelPositions().get(3));
         telemetry.addData("ArmMode", armMotor.getMode());
         telemetry.addData("PlateMode", plateMotor.getMode());
+        telemetry.addData("ArmPower", armMotor.getPower());
+        telemetry.addData("PlatePower", plateMotor.getPower());
         telemetry.update();
     }
 
@@ -125,47 +127,47 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
 
     private void controlDriving() {
         /**drive = gamepad1.right_stick_x;
-        strafe = -gamepad1.right_stick_y;
-        rotate = -gamepad1.right_trigger + gamepad1.left_trigger;
+         strafe = -gamepad1.right_stick_y;
+         rotate = -gamepad1.right_trigger + gamepad1.left_trigger;
 
-        telemetry.addData("drive", drive);
-        telemetry.addData("strafe", strafe);
-        telemetry.addData("rotate", rotate);
-        telemetry.update();
+         telemetry.addData("drive", drive);
+         telemetry.addData("strafe", strafe);
+         telemetry.addData("rotate", rotate);
+         telemetry.update();
 
-        frontLeftPower = strafe + drive + rotate;
-        rearLeftPower = strafe + drive - rotate;
-        rearRightPower = strafe - drive + rotate;
-        frontRightPower = strafe - drive - rotate;
+         frontLeftPower = strafe + drive + rotate;
+         rearLeftPower = strafe + drive - rotate;
+         rearRightPower = strafe - drive + rotate;
+         frontRightPower = strafe - drive - rotate;
 
-        /*double powerFrontLeft = y + x + rx;
-        double powerFrontRight = y - x - rx;
-        double powerBackLeft = y - x + rx;
-        double powerBackRight = y + x - rx;
+         /*double powerFrontLeft = y + x + rx;
+         double powerFrontRight = y - x - rx;
+         double powerBackLeft = y - x + rx;
+         double powerBackRight = y + x - rx;
 
-        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
-        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
-        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
-        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
+         rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
+         rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
+         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
+         frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
 
-        if (gamepad1.right_bumper) {
-            rearLeftPower *= 0.5;
-            rearRightPower *= 0.5;
-            frontLeftPower *= 0.5;
-            frontRightPower *= 0.5;
-        }
-        if (gamepad1.left_bumper) {
-            rearLeftPower *= 0.3;
-            rearRightPower *= 0.3;
-            frontLeftPower *= 0.3;
-            frontRightPower *= 0.3;
-        }
+         if (gamepad1.right_bumper) {
+         rearLeftPower *= 0.5;
+         rearRightPower *= 0.5;
+         frontLeftPower *= 0.5;
+         frontRightPower *= 0.5;
+         }
+         if (gamepad1.left_bumper) {
+         rearLeftPower *= 0.3;
+         rearRightPower *= 0.3;
+         frontLeftPower *= 0.3;
+         frontRightPower *= 0.3;
+         }
 
-        frontLeftMotor.setPower(frontLeftPower);
-        rearLeftMotor.setPower(rearLeftPower);
-        rearRightMotor.setPower(rearRightPower);
-        frontRightMotor.setPower(frontRightPower);
-        */
+         frontLeftMotor.setPower(frontLeftPower);
+         rearLeftMotor.setPower(rearLeftPower);
+         rearRightMotor.setPower(rearRightPower);
+         frontRightMotor.setPower(frontRightPower);
+         */
 
         swp = 1;
         if(gamepad1.right_bumper)
@@ -211,7 +213,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     private void controlArm() {
         executeCurrentMoveTarget();
         MoveTarget currentTarget;
-         if (gamepad2.a) {
+        if (gamepad2.a) {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
@@ -244,28 +246,28 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 960);
+            currentTarget = new MoveTarget(armMotor, -15);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_left) {
             resetTargets();
-            currentTarget = new MoveTarget(armMotor, 600);
+            currentTarget = new MoveTarget(armMotor, -420);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 960);
+            currentTarget = new MoveTarget(plateMotor, -960);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_right){
             resetTargets();
-            currentTarget = new MoveTarget(armMotor, 1000);
+            currentTarget = new MoveTarget(armMotor, -855);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 960);
+            currentTarget = new MoveTarget(plateMotor, -960);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_up){
             resetTargets();
-            currentTarget = new MoveTarget(armMotor, 1660);
+            currentTarget = new MoveTarget(armMotor, -1350);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 960);
+            currentTarget = new MoveTarget(plateMotor, -960);
             moveTargets.add(currentTarget);
         }
 
@@ -301,5 +303,20 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
         } else if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER)
             plateMotor.setPower(0);
 
+        //limiter
+        if(armMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+            if(armPower > 0 && armPosition >= -10)
+                armMotor.setPower(0);
+            telemetry.addData("T", "a incercat");
+            telemetry.update();
+        }
+        if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+            if(platePower > 0 && platePosition >= 1000)
+                plateMotor.setPower(0);
+            else if(platePower < 0 && platePosition <= -1000)
+                plateMotor.setPower(0);
+            telemetry.addData("T", "a incercat");
+            telemetry.update();
+        }
     }
 }

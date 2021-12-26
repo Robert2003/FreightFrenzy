@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.detection;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -37,9 +39,9 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "DetectorAlbastru_Gyro", group="Autonom Cuburi")
+@Autonomous(name= "DetectorAlbastru_GyroLow", group="Autonom Cuburi")
 //@Disabled//comment out this line before using
-public class DetectorAlbastru_Gyro extends LinearOpMode {
+public class DetectorAlbastru_GyroBackupDouble extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -48,6 +50,9 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
     private static int valMid = 0;
     private static int valLeft = 0;
     private static int valRight = 0;
+    private static int valMidLow = 0;
+    private static int valLeftLow = 0;
+    private static int valRightLow = 0;
 
     private static float rectHeight = .6f/8f;
     private static float rectWidth = 1.5f/8f;
@@ -55,10 +60,13 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    public static double[] midPos = {4/8.0+offsetX, 5.5/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {0.4/8.0+offsetX, 5.5/8.0+offsetY}; // era 2
-    public static double[] rightPos = {7.6/8.0+offsetX, 5.5/8.0+offsetY}; // era 6
+    public static double[] midPos = {4/8.0+offsetX, 3.5/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPos = {0.4/8.0+offsetX, 3.5/8.0+offsetY}; // era 2
+    public static double[] rightPos = {7.6/8.0+offsetX, 3.5/8.0+offsetY}; // era 6
     //moves all rectangles right or left by amount. units are in ratio to monitor
+    public static double[] midPosLow = {4/8.0+offsetX, 6/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPosLow = {0.4/8.0+offsetX, 6/8.0+offsetY}; // era 2
+    public static double[] rightPosLow = {7.6/8.0+offsetX, 6/8.0+offsetY}; // era 6
 
     private final int rows = 640;
     private final int cols = 480;
@@ -91,11 +99,23 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
+
+        double distance = 0;
+        double maxDistance = 21;
+        double moveInterval = 1.5;
+        Trajectory traj = mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
+                .strafeRight(moveInterval)
+                .build();
+
         while (opModeIsActive()){
 
             telemetry.addData("Values", valLeft + "   " + valMid + "   " + valRight);
+            telemetry.addData("LValues", valLeftLow + "   " + valMidLow + "   " + valRightLow);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
+            telemetry.addData("PoseX", mecanumDrive.getPoseEstimate().getX());
+            telemetry.addData("PoseY", mecanumDrive.getPoseEstimate().getY());
+
 
             telemetry.update();
             sleep(100);
@@ -106,9 +126,60 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
             if (valMid > 0) chosen = 2;
             if (valRight > 0) chosen = 3;
 
-            AutoUtil.alignWithCube(mecanumDrive, valLeft,
-                    valMid, valRight, new RobotDefinition(hardwareMap).getExcavator());
-
+            if(valLeftLow == 0 && distance < maxDistance) {
+                mecanumDrive.followTrajectory(traj);
+                distance += moveInterval;
+            }
+            else {
+                if(distance >= maxDistance) {
+                    distance /= 2;
+                    Trajectory defTraj = mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
+                            .strafeLeft(distance)
+                            .build();
+                    mecanumDrive.followTrajectory(defTraj);
+                }
+                TrajectorySequence trajSeq;
+                if(distance == 0) {
+                    trajSeq = mecanumDrive.trajectorySequenceBuilder(mecanumDrive.getPoseEstimate())
+                            .forward(15)
+                            //.waitSeconds(2)
+                            .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), false))
+                            .back(65)
+                            .strafeRight(30)
+                            .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), true))
+                            .back(10)
+                            .strafeLeft(30)
+                            .forward(60)
+                            //.waitSeconds(1.5)
+                            .build();
+                }
+                else {
+                    trajSeq = mecanumDrive.trajectorySequenceBuilder(mecanumDrive.getPoseEstimate())
+                            .forward(17)
+                            //.waitSeconds(2)
+                            .back(1)
+                            .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), false))
+                            .waitSeconds(0.1)
+                            .back(16)
+                            //.waitSeconds(0.5)
+                            .strafeLeft(distance)
+                            .back(20)
+                            .lineToLinearHeading(new Pose2d(-50, -25))
+                            .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), true))
+                            .back(3)
+                            .strafeLeft(25)
+                            .forward(53)
+                            /*.strafeRight(30)
+                            .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), true))
+                            .back(10)
+                            .strafeLeft(30)
+                            .forward(60)
+                            //.waitSeconds(1.5)*/
+                            .build();
+                }
+                mecanumDrive.followTrajectorySequence(trajSeq);
+                distance = 0;
+            }
         }
     }
 
@@ -201,6 +272,26 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
             Imgproc.circle(all, pointLeft,5, new Scalar( 255, 0, 0 ),1 );//draws circle
             Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
 
+            //get values from frame
+            double[] pixMidLow = thresholdMat.get((int)(input.rows()* midPosLow[1]), (int)(input.cols()* midPosLow[0]));//gets value at circle
+            valMidLow = (int)pixMidLow[0];
+
+            double[] pixLeftLow = thresholdMat.get((int)(input.rows()* leftPosLow[1]), (int)(input.cols()* leftPosLow[0]));//gets value at circle
+            valLeftLow = (int)pixLeftLow[0];
+
+            double[] pixRightLow = thresholdMat.get((int)(input.rows()* rightPosLow[1]), (int)(input.cols()* rightPosLow[0]));//gets value at circle
+            valRightLow = (int)pixRightLow[0];
+
+            //create three points
+            Point pointMidLow = new Point((int)(input.cols()* midPosLow[0]), (int)(input.rows()* midPosLow[1]));
+            Point pointLeftLow = new Point((int)(input.cols()* leftPosLow[0]), (int)(input.rows()* leftPosLow[1]));
+            Point pointRightLow = new Point((int)(input.cols()* rightPosLow[0]), (int)(input.rows()* rightPosLow[1]));
+
+            //draw circles on those points
+            Imgproc.circle(all, pointMidLow,5, new Scalar( 255, 255, 0 ),1 );//draws circle
+            Imgproc.circle(all, pointLeftLow,5, new Scalar( 255, 255, 0 ),1 );//draws circle
+            Imgproc.circle(all, pointRightLow,5, new Scalar( 255, 255, 0 ),1 );//draws ci
+
             //draw 3 rectangles
             Imgproc.rectangle(//1-3
                     all,
@@ -210,7 +301,7 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
                     new Point(
                             input.cols()*(leftPos[0]+rectWidth/2),
                             input.rows()*(leftPos[1]+rectHeight/2)),
-                    new Scalar(0, 255, 0), 3);
+                    new Scalar(0, 255, 0), 4);
             Imgproc.rectangle(//3-5
                     all,
                     new Point(
@@ -219,7 +310,7 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
                     new Point(
                             input.cols()*(midPos[0]+rectWidth/2),
                             input.rows()*(midPos[1]+rectHeight/2)),
-                    new Scalar(0, 255, 0), 3);
+                    new Scalar(0, 255, 0), 4);
             Imgproc.rectangle(//5-7
                     all,
                     new Point(
@@ -228,7 +319,36 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
                     new Point(
                             input.cols()*(rightPos[0]+rectWidth/2),
                             input.rows()*(rightPos[1]+rectHeight/2)),
-                    new Scalar(0, 255, 0), 3);
+                    new Scalar(0, 255, 0), 4);
+
+            //draw 3 rectangles
+            Imgproc.rectangle(//1-3
+                    all,
+                    new Point(
+                            input.cols()*(leftPosLow[0]-rectWidth/2),
+                            input.rows()*(leftPosLow[1]-rectHeight/2)),
+                    new Point(
+                            input.cols()*(leftPosLow[0]+rectWidth/2),
+                            input.rows()*(leftPosLow[1]+rectHeight/2)),
+                    new Scalar(255, 0, 0), 2);
+            Imgproc.rectangle(//3-5
+                    all,
+                    new Point(
+                            input.cols()*(midPosLow[0]-rectWidth/2),
+                            input.rows()*(midPosLow[1]-rectHeight/2)),
+                    new Point(
+                            input.cols()*(midPosLow[0]+rectWidth/2),
+                            input.rows()*(midPosLow[1]+rectHeight/2)),
+                    new Scalar(255, 0, 0), 2);
+            Imgproc.rectangle(//5-7
+                    all,
+                    new Point(
+                            input.cols()*(rightPosLow[0]-rectWidth/2),
+                            input.rows()*(rightPosLow[1]-rectHeight/2)),
+                    new Point(
+                            input.cols()*(rightPosLow[0]+rectWidth/2),
+                            input.rows()*(rightPosLow[1]+rectHeight/2)),
+                    new Scalar(255, 0, 0), 2);
 
             switch (stageToRenderToViewport)
             {
