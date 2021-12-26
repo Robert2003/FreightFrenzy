@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -16,6 +17,9 @@ public class RobotDefinition {
         excavator = hardwareMap.get(Servo.class, "servo");
 
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public DcMotorEx getArmMotor() {

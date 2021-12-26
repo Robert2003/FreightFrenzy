@@ -304,19 +304,21 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             plateMotor.setPower(0);
 
         //limiter
-        if(armMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER){
-            if(armPower > 0 && armPosition >= -10)
-                armMotor.setPower(0);
-            telemetry.addData("T", "a incercat");
-            telemetry.update();
-        }
-        if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER){
-            if(platePower > 0 && platePosition >= 1000)
-                plateMotor.setPower(0);
-            else if(platePower < 0 && platePosition <= -1000)
-                plateMotor.setPower(0);
-            telemetry.addData("T", "a incercat");
-            telemetry.update();
+        if(!gamepad2.left_stick_button) {
+            if (armMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                if (armPower > 0 && armPosition >= -10)
+                    armMotor.setPower(0);
+                telemetry.addData("T", "a incercat");
+                telemetry.update();
+            }
+            if (plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                if (platePower > 0 && platePosition >= 1000)
+                    plateMotor.setPower(0);
+                else if (platePower < 0 && platePosition <= -1000)
+                    plateMotor.setPower(0);
+                telemetry.addData("T", "a incercat");
+                telemetry.update();
+            }
         }
     }
 }
