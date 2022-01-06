@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -10,11 +11,13 @@ public class RobotDefinition {
 
     DcMotorEx armMotor, plateMotor;
     Servo excavator;
+    CRServo crServo;
 
     public RobotDefinition(HardwareMap hardwareMap){
         plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
         armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
         excavator = hardwareMap.get(Servo.class, "servo");
+        crServo = hardwareMap.get(CRServo.class, "wheelServo");
 
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -34,4 +37,7 @@ public class RobotDefinition {
         return excavator;
     }
 
+    public CRServo getCrServo() {
+        return crServo;
+    }
 }
