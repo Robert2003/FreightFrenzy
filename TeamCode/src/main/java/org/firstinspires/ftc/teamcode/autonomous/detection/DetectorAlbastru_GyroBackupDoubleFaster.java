@@ -40,7 +40,7 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "DetectorAlbastru_GyroLowFast", group="Autonom Cuburi")
+@Autonomous(name= "AutoCollect", group="Autonom Cuburi")
 //@Disabled//comment out this line before using
 public class DetectorAlbastru_GyroBackupDoubleFaster extends LinearOpMode {
 
