@@ -328,8 +328,13 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
     }
 
     private void controlContinuousServo(){
+        if(gamepad2.right_trigger != 0)
+            crServo.setPower(1);
+        else if(gamepad2.left_trigger != 0)
+            crServo.setPower(-1);
+        else
 
-        crServo.setPower(1);
+            crServo.setPower(0);
     }
 
 }
