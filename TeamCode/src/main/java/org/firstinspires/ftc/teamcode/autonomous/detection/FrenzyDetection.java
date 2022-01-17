@@ -42,7 +42,7 @@ import java.util.List;
  */
 @Autonomous(name= "AutoCollect", group="Autonom Cuburi")
 //@Disabled//comment out this line before using
-public class DetectorAlbastru_GyroBackupDoubleFaster extends LinearOpMode {
+public class FrenzyDetection extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -72,9 +72,6 @@ public class DetectorAlbastru_GyroBackupDoubleFaster extends LinearOpMode {
     private final int rows = 640;
     private final int cols = 480;
 
-    double powerFL, powerFR, powerBL, powerBR;
-    double u = 90;
-
     OpenCvCamera phoneCam;
 
     RobotDefinition robot;
@@ -101,16 +98,6 @@ public class DetectorAlbastru_GyroBackupDoubleFaster extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double distance = 0;
-        double maxDistance = 21;
-        double moveInterval = 1.5;
-        double moveSpeed = .2;
-        double maxTime = 2;
-        double startY = mecanumDrive.getPoseEstimate().getY();
-        Trajectory traj = mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                .strafeRight(moveInterval)
-                .build();
-
         while (opModeIsActive()) {
 
             mecanumDrive.update();
@@ -124,7 +111,8 @@ public class DetectorAlbastru_GyroBackupDoubleFaster extends LinearOpMode {
 
 
             telemetry.update();
-            //sleep(100);
+
+            AutoUtil.takeCube(this);
 
             int chosen = 0;
 
@@ -132,87 +120,9 @@ public class DetectorAlbastru_GyroBackupDoubleFaster extends LinearOpMode {
             if (valMid > 0) chosen = 2;
             if (valRight > 0) chosen = 3;
 
-            if (valLeftLow == 0 && runtime.seconds() <= maxTime) {
-                mecanumDrive.setMotorPowers(moveSpeed, -moveSpeed, moveSpeed, -moveSpeed);
-            } else {
-                mecanumDrive.setMotorPowers(0, 0, 0, 0);
-                if (runtime.seconds() > maxTime) {
-                    Trajectory defTraj = mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                            .lineTo(new Vector2d(mecanumDrive.getPoseEstimate().getX(), startY))
-                            .build();
-                    mecanumDrive.followTrajectory(defTraj);
-                }
-                runtime.reset();
-                if(startY == mecanumDrive.getPoseEstimate().getY())
-                    startY = 0.01;
-                /*TrajectorySequence trajSeq1 = mecanumDrive.trajectorySequenceBuilder(mecanumDrive.getPoseEstimate())
-                        .forward(17)
-                        //.waitSeconds(2)
-                        .back(1)
-                        .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), false))
-                        .waitSeconds(0.3)
-                        .back(16)
-                        .addTemporalMarker(() -> AutoUtil.armToPosition(robot.getArmMotor(), -1350))
-                        //.waitSeconds(0.5)\
-                        .build();
-                Trajectory traj1 = mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(mecanumDrive.getPoseEstimate().getX(), startY))
-                        .build();
-                TrajectorySequence trajSeq2 = mecanumDrive.trajectorySequenceBuilder(mecanumDrive.getPoseEstimate())
-                        .back(25)
-                        .addTemporalMarker(() -> AutoUtil.plateToPosition(robot.getPlateMotor(), 960))
-                        .build();
-                Trajectory traj2 = mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(-50, -15))
-                        .build();
-                TrajectorySequence trajSeq3 = mecanumDrive.trajectorySequenceBuilder(mecanumDrive.getPoseEstimate())
-                        .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), true))
-                        .waitSeconds(0.3)
-                        .strafeLeft(15)
-                        .addTemporalMarker(() -> AutoUtil.plateToPosition(robot.getPlateMotor(), 0))
-                        .waitSeconds(0.1)
-                        .addTemporalMarker(() -> AutoUtil.armToPosition(robot.getArmMotor(), -15))
-                        .addTemporalMarker(() -> {telemetry.addData("F","inainte");telemetry.update();})
-                        .forward(50)
-                        /*.strafeRight(30)
-                        .addTemporalMarker(() -> AutoUtil.setClawOpen(robot.getExcavator(), true))
-                        .back(10)
-                        .strafeLeft(30)
-                        .forward(60)
-                        //.waitSeconds(1.5)
-                        .build();*/
-
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .forward(17).build());
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .back(0.5).build());
-                AutoUtil.setClawOpen(robot.getExcavator(), false);
-                sleep(300);
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .back(16.5).build());
-                AutoUtil.armToPosition(robot.getArmMotor(), -1350);
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(mecanumDrive.getPoseEstimate().getX(), startY))
-                        .build());
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .back(25).build());
-                AutoUtil.plateToPosition(robot.getPlateMotor(), 960);
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(-50, -20)) // era -50;-15
-                        .build());
-                AutoUtil.setClawOpen(robot.getExcavator(), true);
-                sleep(300);
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .strafeLeft(15).build());
-                AutoUtil.plateToPosition(robot.getPlateMotor(), 0);
-                sleep(100);
-                AutoUtil.armToPosition(robot.getArmMotor(), -15);
-                mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .forward(50).build());
-                runtime.reset();
-            }
         }
     }
+
 
     private void initialize(){
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
@@ -405,6 +315,26 @@ public class DetectorAlbastru_GyroBackupDoubleFaster extends LinearOpMode {
             }
         }
 
+    }
+
+    public SampleMecanumDrive getMecanumDrive() {
+        return mecanumDrive;
+    }
+
+    public ElapsedTime getRuntimeElapsed() {
+        return runtime;
+    }
+
+    public static int getValLeftLow() {
+        return valLeftLow;
+    }
+
+    public RobotDefinition getRobot() {
+        return robot;
+    }
+
+    public static int getValMidLow() {
+        return valMidLow;
     }
 
 }

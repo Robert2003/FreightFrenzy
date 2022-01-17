@@ -9,15 +9,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class RobotDefinition {
 
-    DcMotorEx armMotor, plateMotor;
+    DcMotorEx armMotor, plateMotor, flyWheel;
     Servo excavator;
-    CRServo crServo;
 
     public RobotDefinition(HardwareMap hardwareMap){
         plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
         armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
         excavator = hardwareMap.get(Servo.class, "servo");
-        crServo = hardwareMap.get(CRServo.class, "wheelServo");
+        flyWheel = hardwareMap.get(DcMotorEx.class, "flyWheel");
+
+        flyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -37,7 +38,7 @@ public class RobotDefinition {
         return excavator;
     }
 
-    public CRServo getCrServo() {
-        return crServo;
+    public DcMotorEx getFlyWheel() {
+        return flyWheel;
     }
 }
