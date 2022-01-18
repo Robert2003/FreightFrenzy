@@ -1,32 +1,36 @@
 package org.firstinspires.ftc.teamcode.autonomous.cases;
 
+import android.view.autofill.AutofillId;
+
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.FreightFrenzyAuto;
-import org.firstinspires.ftc.teamcode.autonomous.FreightFreznyAutoOld;
+import org.firstinspires.ftc.teamcode.autonomous.detection.FrenzyDetection;
 
 public class Case1 {
 
-    FreightFrenzyAuto auto;
+    FrenzyDetection auto;
 
-    Trajectory traj1;
+    Trajectory shippingTraj1;
 
-    public Case1(FreightFrenzyAuto auto){
+    public Case1(FrenzyDetection auto){
         this.auto = auto;
-        traj1 = auto.getMecanumDrive()
+        shippingTraj1 = auto.getMecanumDrive()
                 .trajectoryBuilder(auto.getMecanumDrive().getPoseEstimate())
-                .lineTo(new Vector2d(14, -24))
+                .lineTo(new Vector2d(18.655, 31.861))
                 .build();
     }
 
     public void runAuto(){
-        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 1650);
-        while(auto.getRobot().getArmMotor().isBusy());
-        auto.getMecanumDrive().followTrajectory(traj1);
+        AutoUtil.setClawOpen(auto.getRobot().getExcavator(), false);
+        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 600);
+        //while(auto.getRobot().getArmMotor().isBusy());
+        auto.sleep(3000);
+        auto.getMecanumDrive().followTrajectory(shippingTraj1);
         auto.sleep(3000);
         AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
+
     }
 
 }

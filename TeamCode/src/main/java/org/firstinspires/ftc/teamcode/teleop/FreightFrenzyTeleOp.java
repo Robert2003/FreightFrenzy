@@ -219,7 +219,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 5);
+            currentTarget = new MoveTarget(armMotor, 20);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.x) {
@@ -248,7 +248,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 5);
+            currentTarget = new MoveTarget(armMotor, 20);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_left) {

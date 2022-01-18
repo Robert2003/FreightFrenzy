@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.autonomous.detection;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,7 +12,6 @@ import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.autonomous.cases.Case1;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -41,9 +38,9 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "AutoCollect", group="Autonom Joc")
+@Autonomous(name= "Camera Adjusting", group="Ajustare Joc")
 //@Disabled//comment out this line before using
-public class FrenzyDetection extends LinearOpMode {
+public class CameraAdjusting extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -57,21 +54,21 @@ public class FrenzyDetection extends LinearOpMode {
     private static int valRightLow = 0;
 
     private static float rectHeight = .6f/8f;
-    private static float rectWidth = 1.5f/8f;
+    private static float rectWidth = 1.4f/8f;
 
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    public static double[] midPos = {4/8.0+offsetX, 3.5/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {0.4/8.0+offsetX, 3.5/8.0+offsetY}; // era 2
-    public static double[] rightPos = {7.6/8.0+offsetX, 3.5/8.0+offsetY}; // era 6
+    public static double[] midPos = {4/8.0+offsetX, 2.3/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPos = {1/8.0+offsetX, 2.3/8.0+offsetY}; // era 2
+    public static double[] rightPos = {6.3/8.0+offsetX, 2.3/8.0+offsetY}; // era 6
     //moves all rectangles right or left by amount. units are in ratio to monitor
     public static double[] midPosLow = {4/8.0+offsetX, 6/8.0+offsetY};//0 = col, 1 = row
     public static double[] leftPosLow = {0.4/8.0+offsetX, 6/8.0+offsetY}; // era 2
     public static double[] rightPosLow = {7.6/8.0+offsetX, 6/8.0+offsetY}; // era 6
 
-    private final int rows = 640;
-    private final int cols = 480;
+    private final int rows = 1280; //640 x 480
+    private final int cols = 720;
 
     OpenCvCamera phoneCam;
 
@@ -107,28 +104,8 @@ public class FrenzyDetection extends LinearOpMode {
             telemetry.addData("LValues", valLeftLow + "   " + valMidLow + "   " + valRightLow);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
-            telemetry.addData("PoseX", mecanumDrive.getPoseEstimate().getX());
-            telemetry.addData("PoseY", mecanumDrive.getPoseEstimate().getY());
 
             telemetry.update();
-
-            //AutoUtil.takeCube(this);
-
-            int chosen = 0;
-
-            if (valLeftLow > 0) chosen = 1;
-            if (valMidLow > 0) chosen = 2;
-            if (valRightLow > 0) chosen = 3;
-
-            //fortat
-            chosen = 1;
-
-            switch(chosen){
-                case 1:
-                    new Case1(this).runAuto();
-                    break;
-
-            }
 
         }
     }
