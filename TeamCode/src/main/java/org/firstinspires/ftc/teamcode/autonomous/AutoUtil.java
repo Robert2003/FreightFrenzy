@@ -59,9 +59,9 @@ public class AutoUtil {
         drive.followTrajectorySequence(trajSeq);
     }
 
-    public static void takeCube(FrenzyDetection auto){
+    public static void takeCube(FrenzyDetection auto, double startX){
         SampleMecanumDrive mecanumDrive = auto.getMecanumDrive();
-        int valLeftLow = auto.getValMidLow(); //am pus mid in loc de left
+        int valMidLow = auto.getValMidLow(); //am pus mid in loc de left
         ElapsedTime runtime = auto.getRuntimeElapsed();
         RobotDefinition robot = auto.getRobot();
 
@@ -72,51 +72,63 @@ public class AutoUtil {
          */
         double moveSpeed = .2;
         double maxTime = 2;
-        double startY = mecanumDrive.getPoseEstimate().getY();
 
-        if (valLeftLow == 0 && runtime.seconds() <= maxTime) {
-            mecanumDrive.setMotorPowers(moveSpeed, -moveSpeed, moveSpeed, -moveSpeed);
+        int status = -1;
+
+        auto.telemetry.addData("Info", "ia cuburi\n-----------");
+        auto.telemetry.addData("startX", startX);
+        auto.telemetry.addData("poz x", mecanumDrive.getPoseEstimate().getX());
+        auto.telemetry.addData("poz y", mecanumDrive.getPoseEstimate().getY());
+        auto.telemetry.addData("status", status);
+        auto.telemetry.update();
+
+        if (valMidLow == 0 && runtime.seconds() <= maxTime) {
+            mecanumDrive.setMotorPowers(-moveSpeed, moveSpeed, -moveSpeed, moveSpeed);
+            status = 1;
         } else {
+            status = 2;
+            if(startX == mecanumDrive.getPoseEstimate().getX())
+                startX += 0.1;
             mecanumDrive.setMotorPowers(0, 0, 0, 0);
             if (runtime.seconds() > maxTime) {
                 Trajectory defTraj = mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                        .lineTo(new Vector2d(mecanumDrive.getPoseEstimate().getX(), startY))
+                        .lineTo(new Vector2d(startX, mecanumDrive.getPoseEstimate().getY()))
                         .build();
                 mecanumDrive.followTrajectory(defTraj);
             }
             runtime.reset();
-            if(startY == mecanumDrive.getPoseEstimate().getY())
-                startY = 0.01;
 
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                    .forward(17).build());
+                    .forward(14).build());
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
                     .back(0.5).build());
             AutoUtil.setClawOpen(robot.getExcavator(), false);
             auto.sleep(300);
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                    .back(16.5).build());
+                    .back(13.5).build());
             AutoUtil.armToPosition(robot.getArmMotor(), 1825);
+
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                    .lineToLinearHeading(new Pose2d(mecanumDrive.getPoseEstimate().getX(), startY))
+                    .lineToLinearHeading(new Pose2d(-1, mecanumDrive.getPoseEstimate().getY()))
                     .build());
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
                     .back(25).build());
             AutoUtil.plateToPosition(robot.getPlateMotor(), -1305);
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                    .lineToLinearHeading(new Pose2d(-50, -20)) // era -50;-15
+                    .lineToLinearHeading(new Pose2d(14.75, 31)) // era -50;-15
                     .build());
             AutoUtil.setClawOpen(robot.getExcavator(), true);
             auto.sleep(300);
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-                    .strafeLeft(15).build());
+                    .strafeRight(15).build());
             AutoUtil.plateToPosition(robot.getPlateMotor(), 0);
             auto.sleep(100);
-            AutoUtil.armToPosition(robot.getArmMotor(), -15);
+            AutoUtil.armToPosition(robot.getArmMotor(), 20);
             mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
                     .forward(50).build());
             runtime.reset();
         }
+        mecanumDrive.update();
     }
 
 

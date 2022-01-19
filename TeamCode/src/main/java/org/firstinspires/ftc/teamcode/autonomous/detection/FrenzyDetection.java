@@ -57,21 +57,21 @@ public class FrenzyDetection extends LinearOpMode {
     private static int valRightLow = 0;
 
     private static float rectHeight = .6f/8f;
-    private static float rectWidth = 1.5f/8f;
+    private static float rectWidth = 1.4f/8f;
 
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    public static double[] midPos = {4/8.0+offsetX, 3.5/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {0.4/8.0+offsetX, 3.5/8.0+offsetY}; // era 2
-    public static double[] rightPos = {7.6/8.0+offsetX, 3.5/8.0+offsetY}; // era 6
+    public static double[] midPos = {4/8.0+offsetX, 2.3/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPos = {1/8.0+offsetX, 2.3/8.0+offsetY}; // era 2
+    public static double[] rightPos = {6.3/8.0+offsetX, 2.3/8.0+offsetY}; // era 6
     //moves all rectangles right or left by amount. units are in ratio to monitor
     public static double[] midPosLow = {4/8.0+offsetX, 6/8.0+offsetY};//0 = col, 1 = row
     public static double[] leftPosLow = {0.4/8.0+offsetX, 6/8.0+offsetY}; // era 2
     public static double[] rightPosLow = {7.6/8.0+offsetX, 6/8.0+offsetY}; // era 6
 
-    private final int rows = 640;
-    private final int cols = 480;
+    private final int rows = 1280; //640 x 480
+    private final int cols = 720;
 
     OpenCvCamera phoneCam;
 
@@ -103,12 +103,17 @@ public class FrenzyDetection extends LinearOpMode {
 
             mecanumDrive.update();
 
+            /*
             telemetry.addData("Values", valLeft + "   " + valMid + "   " + valRight);
             telemetry.addData("LValues", valLeftLow + "   " + valMidLow + "   " + valRightLow);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
             telemetry.addData("PoseX", mecanumDrive.getPoseEstimate().getX());
             telemetry.addData("PoseY", mecanumDrive.getPoseEstimate().getY());
+             */
+            telemetry.addData("start x ", mecanumDrive.getPoseEstimate().getX());
+            telemetry.addData("start y ", mecanumDrive.getPoseEstimate().getY());
+            telemetry.addData("start heading ", mecanumDrive.getPoseEstimate().getHeading());
 
             telemetry.update();
 
@@ -156,8 +161,8 @@ public class FrenzyDetection extends LinearOpMode {
             RAW_IMAGE,//displays raw view
         }
 
-        private Stage stageToRenderToViewport = Stage.detection;
-        private Stage[] stages = Stage.values();
+        private CameraAdjusting.StageSwitchingPipeline.Stage stageToRenderToViewport = CameraAdjusting.StageSwitchingPipeline.Stage.detection;
+        private CameraAdjusting.StageSwitchingPipeline.Stage[] stages = CameraAdjusting.StageSwitchingPipeline.Stage.values();
 
         @Override
         public void onViewportTapped()
