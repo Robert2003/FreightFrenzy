@@ -15,32 +15,32 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class AutoUtil {
 
-    public static void setClawOpen(Servo servo, boolean open){
+    public static void setClawOpen(Servo servo, boolean open) {
         double pos = (open ? 0 : .15);
         servo.setPosition(pos);
     }
 
-    public static void armToPosition(DcMotorEx armMotor, int position){
+    public static void armToPosition(DcMotorEx armMotor, int position) {
         armMotor.setTargetPosition(position);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armMotor.setPower(1);
     }
 
-    public static void plateToPosition(DcMotorEx plateMotor, int position){
+    public static void plateToPosition(DcMotorEx plateMotor, int position) {
         plateMotor.setTargetPosition(position);
         plateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         plateMotor.setPower(1);
     }
 
-    public static void alignWithCube(SampleMecanumDrive drive, int left, int mid, int right, Servo servo){
-        double move[] = {0,0.1, 2,10};
+    public static void alignWithCube(SampleMecanumDrive drive, int left, int mid, int right, Servo servo) {
+        double move[] = {0, 0.1, 2, 10};
 
         int pos = 3;
-        if(left > 0)
+        if (left > 0)
             pos = 1;
-        if(right > 0)
+        if (right > 0)
             pos = 2;
-        if(mid > 0)
+        if (mid > 0)
             pos = 3;
 
         TrajectorySequence trajSeq;
@@ -59,7 +59,7 @@ public class AutoUtil {
         drive.followTrajectorySequence(trajSeq);
     }
 
-    public static void takeCube(FrenzyDetection auto, double startX){
+    public static void takeCube(FrenzyDetection auto, double startX) {
         SampleMecanumDrive mecanumDrive = auto.getMecanumDrive();
         int valMidLow = auto.getValMidLow(); //am pus mid in loc de left
         ElapsedTime runtime = auto.getRuntimeElapsed();
@@ -73,21 +73,16 @@ public class AutoUtil {
         double moveSpeed = .2;
         double maxTime = 2;
 
-        int status = -1;
-
         auto.telemetry.addData("Info", "ia cuburi\n-----------");
         auto.telemetry.addData("startX", startX);
         auto.telemetry.addData("poz x", mecanumDrive.getPoseEstimate().getX());
         auto.telemetry.addData("poz y", mecanumDrive.getPoseEstimate().getY());
-        auto.telemetry.addData("status", status);
         auto.telemetry.update();
 
         if (valMidLow == 0 && runtime.seconds() <= maxTime) {
             mecanumDrive.setMotorPowers(-moveSpeed, moveSpeed, -moveSpeed, moveSpeed);
-            status = 1;
         } else {
-            status = 2;
-            if(startX == mecanumDrive.getPoseEstimate().getX())
+            if (startX == mecanumDrive.getPoseEstimate().getX())
                 startX += 0.1;
             mecanumDrive.setMotorPowers(0, 0, 0, 0);
             if (runtime.seconds() > maxTime) {

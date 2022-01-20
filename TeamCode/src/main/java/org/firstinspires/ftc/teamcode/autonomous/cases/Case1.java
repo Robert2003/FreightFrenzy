@@ -20,7 +20,7 @@ public class Case1 {
 
     double startX;
 
-    public Case1(FrenzyDetection auto){
+    public Case1(FrenzyDetection auto) {
         this.auto = auto;
         shippingTraj1 = auto.getMecanumDrive()
                 .trajectoryBuilder(new Pose2d())
@@ -48,7 +48,7 @@ public class Case1 {
                 .build();
     }
 
-    public void runAuto(){
+    public void runAuto() {
         AutoUtil.setClawOpen(auto.getRobot().getExcavator(), false);
         auto.sleep(100);
         AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 600);
@@ -65,12 +65,12 @@ public class Case1 {
         auto.getRuntimeElapsed().reset();
         auto.getMecanumDrive().setPoseEstimate(new Pose2d(0, 0, 0));
         startX = auto.getMecanumDrive().getPoseEstimate().getX();
-        while(auto.opModeIsActive()) {
+        while (auto.opModeIsActive()) {
             AutoUtil.takeCube(auto, startX);
         }
         auto.telemetry.addData("rotatie ", Math.toDegrees(
                 auto.getMecanumDrive().getPoseEstimate().getHeading()) + " timp "
-        + auto.getRuntimeElapsed());
+                + auto.getRuntimeElapsed());
         auto.telemetry.update();
     }
 
