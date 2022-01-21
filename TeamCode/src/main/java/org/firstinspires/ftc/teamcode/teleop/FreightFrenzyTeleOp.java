@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -183,6 +184,14 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
                         (-gamepad1.right_trigger + gamepad1.left_trigger) * swp
                 )
         );
+
+        /*
+        if(gamepad1.y)
+            mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
+            .lineTo(new Vector2d(0, 0))
+            .build());
+         */
+
         mecanumDrive.update();
     }
 
@@ -219,7 +228,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 20);
+            currentTarget = new MoveTarget(armMotor, 35);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.x) {
@@ -248,7 +257,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             resetTargets();
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 20);
+            currentTarget = new MoveTarget(armMotor, 35);
             moveTargets.add(currentTarget);
         }
         else if(gamepad2.dpad_left) {
@@ -304,6 +313,9 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
             platePosition = plateMotor.getCurrentPosition();
         } else if(plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER)
             plateMotor.setPower(0);
+
+        if(gamepad2.left_stick_button)
+            armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //limiter
         /*if(!gamepad2.left_stick_button) {

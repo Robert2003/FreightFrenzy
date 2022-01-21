@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.cases;
+package org.firstinspires.ftc.teamcode.autonomous.cases.autocube;
 
 import android.view.autofill.AutofillId;
 
@@ -18,7 +18,7 @@ public class Case1 {
     Trajectory shippingTraj1, frontWareTraj1, enterWareTraj1;
     TrajectorySequence enterTraj;
 
-    double startX;
+    double startY;
 
     public Case1(FrenzyDetection auto) {
         this.auto = auto;
@@ -44,29 +44,29 @@ public class Case1 {
         enterWareTraj1 = auto.getMecanumDrive().trajectoryBuilder(frontWareTraj1.end())
                 .forward(25)
                 .addTemporalMarker(0.2,
-                        () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 20))
+                        () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 35))
                 .build();
     }
 
     public void runAuto() {
         AutoUtil.setClawOpen(auto.getRobot().getExcavator(), false);
-        auto.sleep(100);
+        auto.sleep(150);
         AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 600);
         //while(auto.getRobot().getArmMotor().isBusy());
         auto.sleep(1000);
         auto.getMecanumDrive().followTrajectory(shippingTraj1);
-        auto.sleep(1000);
+        //auto.sleep(1000);
         AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
-        auto.sleep(400);
+        //auto.sleep(400);
         auto.getMecanumDrive().followTrajectory(frontWareTraj1);
         auto.getMecanumDrive().followTrajectory(enterWareTraj1);
-        auto.sleep(500);
-        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 20);
+        //auto.sleep(500);
+        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 35);
         auto.getRuntimeElapsed().reset();
         auto.getMecanumDrive().setPoseEstimate(new Pose2d(0, 0, 0));
-        startX = auto.getMecanumDrive().getPoseEstimate().getX();
+        startY = auto.getMecanumDrive().getPoseEstimate().getY();
         while (auto.opModeIsActive()) {
-            AutoUtil.takeCube(auto, startX);
+            AutoUtil.takeCube(auto, startY);
         }
         auto.telemetry.addData("rotatie ", Math.toDegrees(
                 auto.getMecanumDrive().getPoseEstimate().getHeading()) + " timp "

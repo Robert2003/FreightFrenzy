@@ -3,18 +3,16 @@ package org.firstinspires.ftc.teamcode.autonomous.detection;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.cases.Case1;
+import org.firstinspires.ftc.teamcode.autonomous.cases.autocube.Case1;
+import org.firstinspires.ftc.teamcode.autonomous.cases.noautocube.Case1NoCube;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -99,21 +97,7 @@ public class FrenzyDetection extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        while (opModeIsActive()) {
-
-            mecanumDrive.update();
-
-            /*
-            telemetry.addData("Values", valLeft + "   " + valMid + "   " + valRight);
-            telemetry.addData("LValues", valLeftLow + "   " + valMidLow + "   " + valRightLow);
-            telemetry.addData("Height", rows);
-            telemetry.addData("Width", cols);
-            telemetry.addData("PoseX", mecanumDrive.getPoseEstimate().getX());
-            telemetry.addData("PoseY", mecanumDrive.getPoseEstimate().getY());
-             */
-            telemetry.addData("start x ", mecanumDrive.getPoseEstimate().getX());
-            telemetry.addData("start y ", mecanumDrive.getPoseEstimate().getY());
-            telemetry.addData("start heading ", mecanumDrive.getPoseEstimate().getHeading());
+        if (opModeIsActive()) {
 
             telemetry.update();
 
@@ -130,7 +114,7 @@ public class FrenzyDetection extends LinearOpMode {
 
             switch(chosen){
                 case 1:
-                    new Case1(this).runAuto();
+                    new Case1NoCube(this).runAuto();
                     break;
 
             }
@@ -359,4 +343,21 @@ public class FrenzyDetection extends LinearOpMode {
     public int getCols() {
         return cols;
     }
+
+    public static int getValLeft() {
+        return valLeft;
+    }
+
+    public static int getValMid() {
+        return valMid;
+    }
+
+    public static int getValRight() {
+        return valRight;
+    }
+
+    public static int getValRightLow() {
+        return valRightLow;
+    }
+
 }
