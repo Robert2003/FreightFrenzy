@@ -35,16 +35,16 @@ public class UniversalCase {
                 .build();
         parkTraj = auto.getMecanumDrive()
                 .trajectoryBuilder(duckTraj2.end())
-                .lineToLinearHeading(new Pose2d(4,-83, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(4,-80, Math.toRadians(-90)))
                 .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 35))
                 .build();
         backTraj = auto.getMecanumDrive()
                 .trajectoryBuilder(parkTraj.end())
-                .back(43)
+                .back(40)
                 .build();
         shippingTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj.end())
-                .lineTo(new Vector2d(35, -20)) // x era 14.75
+                .lineTo(new Vector2d(31, -20)) // x era 14.75
                 .build();
         strafeTraj = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj2.end())

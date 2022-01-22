@@ -44,7 +44,7 @@ public class Case1 {
         enterWareTraj1 = auto.getMecanumDrive().trajectoryBuilder(frontWareTraj1.end())
                 .forward(25)
                 .addTemporalMarker(0.2,
-                        () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 35))
+                        () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 15))
                 .build();
     }
 
@@ -61,7 +61,7 @@ public class Case1 {
         auto.getMecanumDrive().followTrajectory(frontWareTraj1);
         auto.getMecanumDrive().followTrajectory(enterWareTraj1);
         //auto.sleep(500);
-        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 35);
+        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 15);
         auto.getRuntimeElapsed().reset();
         auto.getMecanumDrive().setPoseEstimate(new Pose2d(0, 0, 0));
         startY = auto.getMecanumDrive().getPoseEstimate().getY();
