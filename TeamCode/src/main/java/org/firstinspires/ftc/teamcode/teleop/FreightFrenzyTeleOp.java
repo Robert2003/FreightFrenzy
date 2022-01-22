@@ -337,13 +337,31 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
 
     }
 
+    boolean startedDucks = false;
+    float initDuckSpeed = .7f;
+    int timeToAccel = 800; //millis
+
     private void controlContinuousServo(){
-        if(gamepad2.right_trigger != 0)
-            flyWheel.setPower(.65);
-        else if(gamepad2.left_trigger != 0)
-            flyWheel.setPower(-.65);
-        else
+        if(gamepad2.right_trigger != 0) {
+            if(!startedDucks){
+                runtime.reset();
+                startedDucks = true;
+            }
+            flyWheel.setPower(initDuckSpeed);
+            if(runtime.milliseconds() > timeToAccel)
+                flyWheel.setPower(runtime.milliseconds() * initDuckSpeed / timeToAccel);
+        } else if(gamepad2.left_trigger != 0) {
+            if(!startedDucks){
+                runtime.reset();
+                startedDucks = true;
+            }
+            flyWheel.setPower(-initDuckSpeed);
+            if(runtime.milliseconds() > timeToAccel)
+                flyWheel.setPower(-runtime.milliseconds() * initDuckSpeed / timeToAccel);
+        } else {
             flyWheel.setPower(0);
+            startedDucks = false;
+        }
     }
 
 }

@@ -9,8 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.cases.autocube.Case1;
-import org.firstinspires.ftc.teamcode.autonomous.cases.noautocube.Case1NoCube;
+import org.firstinspires.ftc.teamcode.autonomous.cases.noautocube.UniversalCase;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.opencv.core.Core;
@@ -54,15 +53,15 @@ public class FrenzyDetection extends LinearOpMode {
     private static int valLeftLow = 0;
     private static int valRightLow = 0;
 
-    private static float rectHeight = .6f/8f;
-    private static float rectWidth = 1.4f/8f;
+    private static float rectHeight = .8f/8f;
+    private static float rectWidth = 1.2f/8f;
 
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    public static double[] midPos = {4/8.0+offsetX, 2.3/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {1/8.0+offsetX, 2.3/8.0+offsetY}; // era 2
-    public static double[] rightPos = {6.3/8.0+offsetX, 2.3/8.0+offsetY}; // era 6
+    public static double[] midPos = {3.7/8.0+offsetX, 2.3/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPos = {.9/8.0+offsetX, 2.3/8.0+offsetY}; // era 2
+    public static double[] rightPos = {6.1/8.0+offsetX, 2.3/8.0+offsetY}; // era 6
     //moves all rectangles right or left by amount. units are in ratio to monitor
     public static double[] midPosLow = {4/8.0+offsetX, 6/8.0+offsetY};//0 = col, 1 = row
     public static double[] leftPosLow = {0.4/8.0+offsetX, 6/8.0+offsetY}; // era 2
@@ -99,25 +98,16 @@ public class FrenzyDetection extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            telemetry.update();
-
-            //AutoUtil.takeCube(this);
-
             int chosen = 0;
 
-            if (valLeftLow > 0) chosen = 1;
-            if (valMidLow > 0) chosen = 2;
-            if (valRightLow > 0) chosen = 3;
+            if (valLeft > 0) chosen = 1825;
+            if (valMid > 0) chosen = 1200;
+            if (valRight > 0) chosen = 600;
 
-            //fortat
-            chosen = 1;
+            telemetry.addData("Case", chosen);
+            telemetry.update();
 
-            switch(chosen){
-                case 1:
-                    new Case1NoCube(this).runAuto();
-                    break;
-
-            }
+            new UniversalCase(this, chosen).runAuto();
 
         }
     }
