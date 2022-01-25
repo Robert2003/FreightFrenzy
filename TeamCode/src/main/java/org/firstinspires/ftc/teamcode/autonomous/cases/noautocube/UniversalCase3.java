@@ -39,11 +39,11 @@ public class UniversalCase3 {
                 .build();
         enterTraj1 = auto.getMecanumDrive()
                 .trajectoryBuilder(wareTraj1.end())
-                .forward(23)
+                .forward(22)
                 .build();
         backTraj1 = auto.getMecanumDrive()
                 .trajectoryBuilder(enterTraj1.end())
-                .back(28)
+                .back(29)
                 .build();
         shippingTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj1.end())
