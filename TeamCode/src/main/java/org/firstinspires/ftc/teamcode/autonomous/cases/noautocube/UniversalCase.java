@@ -36,7 +36,7 @@ public class UniversalCase {
         parkTraj = auto.getMecanumDrive()
                 .trajectoryBuilder(duckTraj2.end())
                 .lineToLinearHeading(new Pose2d(4,-80, Math.toRadians(-90)))
-                .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 35))
+                .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 15))
                 .build();
         backTraj = auto.getMecanumDrive()
                 .trajectoryBuilder(parkTraj.end())
@@ -54,13 +54,13 @@ public class UniversalCase {
         parkTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(strafeTraj.end())
                 .lineToLinearHeading(new Pose2d(4,-75, Math.toRadians(-90)))
-                .addTemporalMarker(.4, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 35))
+                .addTemporalMarker(.4, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 15))
                 .build();
     }
 
     public void runAuto() {
         AutoUtil.setClawOpen(auto.getRobot().getExcavator(), false);
-        auto.sleep(200);
+        auto.sleep(280);
         AutoUtil.armToPosition(auto.getRobot().getArmMotor(), armGoTo);
         //while(auto.getRobot().getArmMotor().isBusy());
         auto.sleep(1000);

@@ -348,7 +348,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
 
     boolean startedDucks = false;
     float initDuckSpeed = .7f;
-    int timeToAccel = 800; //millis
+    int timeToAccel = 550; //millis, era 800 650
 
     private void controlContinuousServo(){
         if(gamepad2.right_trigger != 0) {

@@ -10,21 +10,22 @@ import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 public class ServoAdjusting extends LinearOpMode {
 
     Servo servo;
-    double moveInterval = 0.05;
-
-    public ServoAdjusting(){
-        servo = new RobotDefinition(hardwareMap).getExcavator();
-    }
+    double moveInterval = 0.0005;
+    double servoPos;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        servo = new RobotDefinition(hardwareMap).getExcavator();
+        servoPos = 0;
+        waitForStart();
         while(opModeIsActive()){
-            telemetry.addData("Servo Position", servo.getPosition());
-            telemetry.update();
             if(gamepad1.dpad_left)
-                servo.setPosition(servo.getPosition() - moveInterval);
+                servoPos -= moveInterval;
             else if(gamepad1.dpad_right)
-                servo.setPosition(servo.getPosition() + moveInterval);
+                servoPos += moveInterval;
+            servo.setPosition(servoPos);
+            telemetry.addData("Servo Position", servoPos);
+            telemetry.update();
         }
     }
 

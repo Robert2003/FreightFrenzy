@@ -12,6 +12,8 @@ public class RobotDefinition {
     DcMotorEx armMotor, plateMotor, flyWheel;
     Servo excavator;
 
+    int zeroArm = 15;
+
     public RobotDefinition(HardwareMap hardwareMap){
         plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
         armMotor = hardwareMap.get(DcMotorEx.class, "armMotor");
@@ -40,5 +42,9 @@ public class RobotDefinition {
 
     public DcMotorEx getFlyWheel() {
         return flyWheel;
+    }
+
+    public int getZeroArm() {
+        return zeroArm;
     }
 }

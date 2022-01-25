@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.autonomous.cases.noautocube.UniversalCase;
+import org.firstinspires.ftc.teamcode.autonomous.cases.noautocube.UniversalCase2;
+import org.firstinspires.ftc.teamcode.autonomous.cases.noautocube.UniversalCase3;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.opencv.core.Core;
@@ -101,13 +103,16 @@ public class FrenzyDetection extends LinearOpMode {
             int chosen = 0;
 
             if (valLeft > 0) chosen = 1825;
-            if (valMid > 0) chosen = 1200;
+            if (valMid > 0) chosen = 1250;
             if (valRight > 0) chosen = 600;
+
+            //fortat
+            chosen = 600;
 
             telemetry.addData("Case", chosen);
             telemetry.update();
 
-            new UniversalCase(this, chosen).runAuto();
+            new UniversalCase3(this, chosen).runAuto();
 
         }
     }
