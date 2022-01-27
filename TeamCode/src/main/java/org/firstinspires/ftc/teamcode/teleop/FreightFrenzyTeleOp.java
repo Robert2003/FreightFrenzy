@@ -172,7 +172,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
          frontRightMotor.setPower(frontRightPower);
          */
 
-        ms = .9f;
+        ms = .85f;
         if(gamepad1.dpad_up)
             ms = 1;
         swp = 1;

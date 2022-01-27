@@ -107,7 +107,7 @@ public class FrenzyDetection extends LinearOpMode {
             if (valRight > 0) chosen = 600;
 
             //fortat
-            chosen = 600;
+            chosen = 1250;
 
             telemetry.addData("Case", chosen);
             telemetry.update();
