@@ -93,6 +93,21 @@ public class FrenzyDetection extends LinearOpMode {
         FtcDashboard.getInstance().startCameraStream(phoneCam, 0);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        int selectedCase = 0;
+        while(!gamepad1.y && !isStopRequested()) {
+            if(gamepad1.dpad_up) selectedCase++;
+            if(gamepad1.dpad_down) selectedCase--;
+            if(selectedCase == 4)
+                selectedCase = 0;
+            else if(selectedCase == -1)
+                selectedCase = 3;
+            telemetry.addData("case", selectedCase);
+            telemetry.addData("info", "Press Y before start.");
+            telemetry.update();
+        }
+        telemetry.addData("info2", "Case confirmed. Ready to start.");
+        telemetry.update();
+
         initialize();
 
         waitForStart();
@@ -102,12 +117,12 @@ public class FrenzyDetection extends LinearOpMode {
 
             int chosen = 0;
 
-            if (valLeft > 0) chosen = 1825;
-            if (valMid > 0) chosen = 1250;
-            if (valRight > 0) chosen = 600;
+            if (valRight > 0 || selectedCase == 1) chosen = 1825;
+            if (valMid > 0 || selectedCase == 2) chosen = 1250;
+            if (valLeft > 0 || selectedCase == 3) chosen = 600;
 
             //fortat
-            chosen = 1250;
+            //chosen = 1250;
 
             telemetry.addData("Case", chosen);
             telemetry.update();
