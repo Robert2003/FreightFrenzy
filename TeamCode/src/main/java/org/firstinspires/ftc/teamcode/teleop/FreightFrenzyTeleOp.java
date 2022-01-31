@@ -172,7 +172,8 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
          frontRightMotor.setPower(frontRightPower);
          */
 
-        ms = .85f;
+        ms = .82f;
+
         if(gamepad1.dpad_up)
             ms = 1;
         swp = 1;
@@ -348,7 +349,7 @@ public class FreightFrenzyTeleOp extends LinearOpMode {
 
     boolean startedDucks = false;
     float initDuckSpeed = .8f;
-    int timeToAccel = 400, timeToAccelInsta =500 ; //millis, era 800 650
+    int timeToAccel = 500, timeToAccelInsta = 700; //millis, era 800 650
 
     private void controlContinuousServo(){
         if(gamepad2.right_trigger != 0) {

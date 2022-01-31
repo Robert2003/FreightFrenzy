@@ -53,7 +53,7 @@ public class UniversalCase3 {
                 .build();
         shippingTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj1.end())
-                .lineTo(new Vector2d(16, -60),
+                .lineTo(new Vector2d(16.5, -61),
                         SampleMecanumDrive.getVelocityConstraint(60, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)) // x era 14.75
                 .build();
@@ -94,7 +94,7 @@ public class UniversalCase3 {
                 .build();
         shippingTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj3.end())
-                .lineTo(new Vector2d(7, -40)) // x era 14.75
+                .lineTo(new Vector2d(7.5, -42)) // x era 14.75
                 .build();
         wareTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj4.end())
@@ -134,7 +134,7 @@ public class UniversalCase3 {
         AutoUtil.setClawOpen(claw, false);
         auto.getMecanumDrive().followTrajectory(backTraj2);
         AutoUtil.armToPosition(armMotor, 1805);
-        AutoUtil.plateToPosition(plateMotor, -1800);
+        AutoUtil.plateToPosition(plateMotor, -1700);
         auto.getMecanumDrive().followTrajectory(shippingTraj3);
         AutoUtil.setClawOpen(claw, true);
         auto.sleep(300);

@@ -117,9 +117,9 @@ public class FrenzyDetection extends LinearOpMode {
 
             int chosen = 0;
 
-            if (valRight > 0 || selectedCase == 1) chosen = 1825;
+            if (valRight > 0 || selectedCase == 3) chosen = 1825;
             if (valMid > 0 || selectedCase == 2) chosen = 1250;
-            if (valLeft > 0 || selectedCase == 3) chosen = 600;
+            if (valLeft > 0 || selectedCase == 1) chosen = 650;
 
             //fortat
             //chosen = 1250;
