@@ -100,7 +100,7 @@ public class UniversalCase3 {
                 .build();
         shippingTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj3.end())
-                .lineTo(new Vector2d(10, -38)) // x era 14.75
+                .lineTo(new Vector2d(10, -36.5)) // x era 14.75
                 .build();
         wareTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj4.end())
