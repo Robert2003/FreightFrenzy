@@ -61,9 +61,9 @@ public class FrenzyDetection extends LinearOpMode {
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    public static double[] midPos = {3.7/8.0+offsetX, 1.6/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {.3/8.0+offsetX, 1.4/8.0+offsetY}; // era 2
-    public static double[] rightPos = {7/8.0+offsetX, 1.8/8.0+offsetY}; // era 6
+    public static double[] midPos = {3.7/8.0+offsetX, 1.4/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPos = {.3/8.0+offsetX, 1.2/8.0+offsetY}; // era 2
+    public static double[] rightPos = {7/8.0+offsetX, 1.6/8.0+offsetY}; // era 6
     //moves all rectangles right or left by amount. units are in ratio to monitor
     public static double[] midPosLow = {4/8.0+offsetX, 6/8.0+offsetY};//0 = col, 1 = row
     public static double[] leftPosLow = {0.4/8.0+offsetX, 6/8.0+offsetY}; // era 2
@@ -94,7 +94,8 @@ public class FrenzyDetection extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         int selectedCase = 0;
-        while(!gamepad1.y && !isStopRequested()) {
+        boolean selecting = true;
+        while(selecting && !isStopRequested()) {
             sleep(300);
             if(gamepad1.dpad_up) selectedCase++;
             if(gamepad1.dpad_down) selectedCase--;
@@ -105,6 +106,8 @@ public class FrenzyDetection extends LinearOpMode {
             telemetry.addData("case", selectedCase);
             telemetry.addData("info", "Press Y before start.");
             telemetry.update();
+            if(gamepad1.y)
+                selecting = false;
         }
         telemetry.addData("info2", "Case confirmed. Ready to start.");
         telemetry.update();
@@ -195,7 +198,7 @@ public class FrenzyDetection extends LinearOpMode {
             Core.extractChannel(yCbCrChan2Mat, yCbCrChan2Mat, 2);//takes cb difference and stores
 
             //b&w
-            Imgproc.threshold(yCbCrChan2Mat, thresholdMat, 120, 255, Imgproc.THRESH_BINARY_INV);
+            Imgproc.threshold(yCbCrChan2Mat, thresholdMat, 110, 255, Imgproc.THRESH_BINARY_INV);
 
             //outline/contour
             Imgproc.findContours(thresholdMat, contoursList, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
