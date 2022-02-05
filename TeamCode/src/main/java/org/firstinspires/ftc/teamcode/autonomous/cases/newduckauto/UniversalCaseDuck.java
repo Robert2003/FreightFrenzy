@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.cases.noautocube;
+package org.firstinspires.ftc.teamcode.autonomous.cases.newduckauto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class UniversalCase3 {
+public class UniversalCaseDuck {
 
     FrenzyDetection auto;
 
@@ -25,7 +25,7 @@ public class UniversalCase3 {
 
     int armGoTo;
 
-    public UniversalCase3(FrenzyDetection auto, int armGoTo) {
+    public UniversalCaseDuck(FrenzyDetection auto, int armGoTo) {
         this.auto = auto;
         this.armGoTo = armGoTo;
         claw = auto.getRobot().getExcavator();

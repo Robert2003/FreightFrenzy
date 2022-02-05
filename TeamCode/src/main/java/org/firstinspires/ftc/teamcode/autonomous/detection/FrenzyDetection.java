@@ -95,6 +95,7 @@ public class FrenzyDetection extends LinearOpMode {
 
         int selectedCase = 0;
         while(!gamepad1.y && !isStopRequested()) {
+            sleep(500);
             if(gamepad1.dpad_up) selectedCase++;
             if(gamepad1.dpad_down) selectedCase--;
             if(selectedCase == 4)
