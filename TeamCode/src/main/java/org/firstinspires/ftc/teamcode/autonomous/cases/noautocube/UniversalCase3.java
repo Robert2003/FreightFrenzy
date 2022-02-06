@@ -69,7 +69,7 @@ public class UniversalCase3 {
                 .build();
         enterTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(wareTraj2.end())
-                .forward(33.5)
+                .forward(33)
                 .build();
         backTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(enterTraj2.end())
@@ -83,11 +83,11 @@ public class UniversalCase3 {
                 .build();
         wareTraj3 = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj3.end())
-                .lineToLinearHeading(new Pose2d(-24, -56, Math.toRadians(-120)))
+                .lineToLinearHeading(new Pose2d(-26, -58, Math.toRadians(-120)))
                 .build();
         turnTraj1 = auto.getMecanumDrive()
                 .trajectorySequenceBuilder(wareTraj3.end())
-                .turn(Math.toRadians(30))
+                .turn(Math.toRadians(15))
                 .build();
         enterTraj3 = auto.getMecanumDrive()
                 .trajectoryBuilder(turnTraj1.end())
@@ -100,11 +100,11 @@ public class UniversalCase3 {
                 .build();
         shippingTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj3.end())
-                .lineTo(new Vector2d(8.3, -36.5)) // x era 14.75
+                .lineTo(new Vector2d(10, -45)) // x era 14.75
                 .build();
         wareTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj4.end())
-                .lineToLinearHeading(new Pose2d(-24, -55, Math.toRadians(-120)),
+                .lineToLinearHeading(new Pose2d(-24, -52, Math.toRadians(-120)),
                         SampleMecanumDrive.getVelocityConstraint(37, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addTemporalMarker(1.3, () -> AutoUtil.armToPosition(armMotor, 350))
