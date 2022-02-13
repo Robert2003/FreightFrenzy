@@ -57,13 +57,13 @@ public class UniversalCase3 {
                 .build();
         shippingTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj1.end())
-                .lineTo(new Vector2d(17, -77),
+                .lineTo(new Vector2d(15, -77),
                         SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)) // x era 14.75
                 .build();
         wareTraj2 = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj2.end())
-                .lineToLinearHeading(new Pose2d(-24, -56, Math.toRadians(-120)),
+                .lineToLinearHeading(new Pose2d(-26, -56, Math.toRadians(-120)),
                         SampleMecanumDrive.getVelocityConstraint(48, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -77,13 +77,13 @@ public class UniversalCase3 {
                 .build();
         shippingTraj3 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj2.end())
-                .lineTo(new Vector2d(16, -56),
+                .lineTo(new Vector2d(13, -56),
                         SampleMecanumDrive.getVelocityConstraint(60, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)) // x era 14.75
                 .build();
         wareTraj3 = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj3.end())
-                .lineToLinearHeading(new Pose2d(-26, -58, Math.toRadians(-120)))
+                .lineToLinearHeading(new Pose2d(-29, -58, Math.toRadians(-120)))
                 .build();
         turnTraj1 = auto.getMecanumDrive()
                 .trajectorySequenceBuilder(wareTraj3.end())
@@ -100,18 +100,19 @@ public class UniversalCase3 {
                 .build();
         shippingTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(backTraj3.end())
-                .lineTo(new Vector2d(10, -45)) // x era 14.75
+                .lineTo(new Vector2d(8.5, -45))// x era 14.75
                 .build();
         wareTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(shippingTraj4.end())
                 .lineToLinearHeading(new Pose2d(-24, -52, Math.toRadians(-120)),
                         SampleMecanumDrive.getVelocityConstraint(37, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addTemporalMarker(1, () -> AutoUtil.plateToPosition(plateMotor, 0))
                 .addTemporalMarker(1.3, () -> AutoUtil.armToPosition(armMotor, 350))
                 .build();
         enterTraj4 = auto.getMecanumDrive()
                 .trajectoryBuilder(wareTraj4.end())
-                .forward(26, SampleMecanumDrive.getVelocityConstraint(70, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .forward(30, SampleMecanumDrive.getVelocityConstraint(70, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
     }
@@ -153,12 +154,11 @@ public class UniversalCase3 {
         AutoUtil.setClawOpen(claw, false);
         auto.getMecanumDrive().followTrajectory(backTraj3);
         AutoUtil.armToPosition(armMotor, 1805);
-        AutoUtil.plateToPosition(plateMotor, -1790);
+        AutoUtil.plateToPosition(plateMotor, -1700);
         auto.getMecanumDrive().followTrajectory(shippingTraj4);
         AutoUtil.setClawOpen(claw, true);
-        auto.sleep(300);
 
-        AutoUtil.plateToPosition(plateMotor, 0);
+        //AutoUtil.plateToPosition(plateMotor, 0);
         auto.getMecanumDrive().followTrajectory(wareTraj4);
         AutoUtil.armToPosition(armMotor, auto.getRobot().getZeroArm());
         auto.getMecanumDrive().followTrajectory(enterTraj4);

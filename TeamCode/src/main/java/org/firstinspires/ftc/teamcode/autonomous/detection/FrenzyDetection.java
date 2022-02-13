@@ -61,9 +61,9 @@ public class FrenzyDetection extends LinearOpMode {
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    public static double[] midPos = {3.7/8.0+offsetX, 1.4/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {.3/8.0+offsetX, 1.2/8.0+offsetY}; // era 2
-    public static double[] rightPos = {7/8.0+offsetX, 1.6/8.0+offsetY}; // era 6
+    public static double[] midPos = {4.3/8.0+offsetX, 1.4/8.0+offsetY};//0 = col, 1 = row
+    public static double[] leftPos = {1/8.0+offsetX, 1.2/8.0+offsetY}; // era 2
+    public static double[] rightPos = {7.7/8.0+offsetX, 1.6/8.0+offsetY}; // era 6
     //moves all rectangles right or left by amount. units are in ratio to monitor
     public static double[] midPosLow = {4/8.0+offsetX, 6/8.0+offsetY};//0 = col, 1 = row
     public static double[] leftPosLow = {0.4/8.0+offsetX, 6/8.0+offsetY}; // era 2
