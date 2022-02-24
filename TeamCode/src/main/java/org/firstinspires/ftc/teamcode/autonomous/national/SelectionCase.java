@@ -5,9 +5,8 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.detection.FrenzyDetection;
-import org.firstinspires.ftc.teamcode.autonomous.national.options.ForcedCase;
-import org.firstinspires.ftc.teamcode.autonomous.national.options.Side;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.ForcedCase;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 
 public class SelectionCase {
 
@@ -25,6 +24,7 @@ public class SelectionCase {
         this.armGoTo = armGoTo;
         this.side = side;
         this.forcedCase = forcedCase;
+        initializeTrajectories();
     }
 
     private void initializeTrajectories() {
@@ -45,6 +45,7 @@ public class SelectionCase {
                 .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
                 .build();
     }
+
     public void runAuto() {
 
     }

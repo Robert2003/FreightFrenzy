@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.national.options;
+package org.firstinspires.ftc.teamcode.autonomous.national.option;
 
 public enum ForcedCase {
 

@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.national.options.ForcedCase;
-import org.firstinspires.ftc.teamcode.autonomous.national.options.Side;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.ForcedCase;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -23,10 +23,11 @@ public class FrenzySelection extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
+        selectOptions();
         runtime.reset();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
-
+            new SelectionCase(this, 500).runAuto();
         }
     }
 
@@ -49,8 +50,13 @@ public class FrenzySelection extends LinearOpMode {
         boolean confirmed = false;
         while(!confirmed && !isStopRequested()){
             cycleOptions();
+            if(gamepad1.y)
+                confirmed = true;
             sleep(navigatingDelay);
         }
+        telemetry.addData("", "Options confirmed. Ready for start.");
+        telemetry.addData("", "(19121 nu e soft deloc)");
+        telemetry.update();
     }
 
     private void cycleOptions(){
@@ -78,11 +84,13 @@ public class FrenzySelection extends LinearOpMode {
     }
 
     private void showcaseOptions(){
+        telemetry.addData("", "------Options------");
         telemetry.addData("Side", side.toString() + (cursorOption == 1 ? " <-" : ""));
         telemetry.addData("Forced Case", forcedCase.toString() + (cursorOption == 2 ? " <-" : ""));
-        telemetry.addData("", "---------------");
+        telemetry.addData("", "------Info------");
         telemetry.addData("Cycle vertical", "DPAD DOWN");
         telemetry.addData("Cycle horizontal", "DPAD RIGHT");
+        telemetry.addData("Confirm", "Y");
         telemetry.update();
     }
 
