@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.national;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+@Autonomous(name= "Frenzy Selection")
 public class FrenzySelection extends LinearOpMode {
 
     ElapsedTime runtime = new ElapsedTime();
@@ -33,7 +35,7 @@ public class FrenzySelection extends LinearOpMode {
 
     private void initialize(){
         robot = new RobotDefinition(hardwareMap);
-        robot = new RobotDefinition(hardwareMap);
+        mecanumDrive = new SampleMecanumDrive(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
         AutoUtil.setClawOpen(robot.getExcavator(), true);
     }
@@ -50,6 +52,7 @@ public class FrenzySelection extends LinearOpMode {
         boolean confirmed = false;
         while(!confirmed && !isStopRequested()){
             cycleOptions();
+            showcaseOptions();
             if(gamepad1.y)
                 confirmed = true;
             sleep(navigatingDelay);
@@ -75,7 +78,7 @@ public class FrenzySelection extends LinearOpMode {
                     break;
                 case 2:
                     int newCase = forcedCase.ordinal() + 1;
-                    if(newCase == Side.values().length)
+                    if(newCase == ForcedCase.values().length)
                         newCase = 0;
                     side = Side.values()[newCase];
                     break;
@@ -100,6 +103,14 @@ public class FrenzySelection extends LinearOpMode {
 
     public RobotDefinition getRobot() {
         return robot;
+    }
+
+    public Side getSide() {
+        return side;
+    }
+
+    public ForcedCase getForcedCase() {
+        return forcedCase;
     }
 
 }
