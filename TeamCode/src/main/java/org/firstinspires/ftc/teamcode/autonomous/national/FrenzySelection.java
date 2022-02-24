@@ -80,7 +80,7 @@ public class FrenzySelection extends LinearOpMode {
                     int newCase = forcedCase.ordinal() + 1;
                     if(newCase == ForcedCase.values().length)
                         newCase = 0;
-                    side = Side.values()[newCase];
+                    forcedCase = ForcedCase.values()[newCase];
                     break;
             }
         }
