@@ -22,8 +22,8 @@ public class SelectionCase {
     public SelectionCase(FrenzySelection auto, int armGoTo) {
         this.auto = auto;
         this.armGoTo = armGoTo;
-        this.side = side;
-        this.forcedCase = forcedCase;
+        this.side = auto.getSide();
+        this.forcedCase = auto.getForcedCase();
         initializeTrajectories();
     }
 
