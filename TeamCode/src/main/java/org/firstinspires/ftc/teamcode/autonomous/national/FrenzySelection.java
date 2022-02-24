@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.autonomous.national;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.autonomous.national.options.ForcedCase;
 import org.firstinspires.ftc.teamcode.autonomous.national.options.Side;
+import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public class FrenzySelection extends LinearOpMode {
 
@@ -13,8 +17,12 @@ public class FrenzySelection extends LinearOpMode {
     Side side = Side.RED;
     ForcedCase forcedCase = ForcedCase.DETECTION;
 
+    RobotDefinition robot;
+    SampleMecanumDrive mecanumDrive;
+
     @Override
     public void runOpMode() throws InterruptedException {
+        initialize();
         runtime.reset();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
@@ -22,7 +30,15 @@ public class FrenzySelection extends LinearOpMode {
         }
     }
 
+    private void initialize(){
+        robot = new RobotDefinition(hardwareMap);
+        robot = new RobotDefinition(hardwareMap);
+        mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
+        AutoUtil.setClawOpen(robot.getExcavator(), true);
+    }
+
     int cursorOption = 1;
+    int navigatingDelay = 1500;
     /*
         LISTA OPTIUNI (IDs)
         1 - Parte
@@ -32,7 +48,8 @@ public class FrenzySelection extends LinearOpMode {
     private void selectOptions(){
         boolean confirmed = false;
         while(!confirmed && !isStopRequested()){
-
+            cycleOptions();
+            sleep(navigatingDelay);
         }
     }
 
@@ -50,6 +67,12 @@ public class FrenzySelection extends LinearOpMode {
                         newSide = 0;
                     side = Side.values()[newSide];
                     break;
+                case 2:
+                    int newCase = forcedCase.ordinal() + 1;
+                    if(newCase == Side.values().length)
+                        newCase = 0;
+                    side = Side.values()[newCase];
+                    break;
             }
         }
     }
@@ -61,6 +84,14 @@ public class FrenzySelection extends LinearOpMode {
         telemetry.addData("Cycle vertical", "DPAD DOWN");
         telemetry.addData("Cycle horizontal", "DPAD RIGHT");
         telemetry.update();
+    }
+
+    public SampleMecanumDrive getMecanumDrive() {
+        return mecanumDrive;
+    }
+
+    public RobotDefinition getRobot() {
+        return robot;
     }
 
 }
