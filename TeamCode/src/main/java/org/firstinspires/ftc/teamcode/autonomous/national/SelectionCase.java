@@ -47,7 +47,20 @@ public class SelectionCase {
     }
 
     public void runAuto() {
-
+        AutoUtil.setClawOpen(auto.getRobot().getExcavator(), false);
+        auto.sleep(280);
+        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), armGoTo);
+        //while(auto.getRobot().getArmMotor().isBusy());
+        auto.sleep(2000);
+        auto.getMecanumDrive().followTrajectory(deliverPreloadBox);
+        //auto.sleep(1000);
+        AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
+        //auto.sleep(400);
+        auto.getMecanumDrive().followTrajectory(goToCarousel);
+        //auto.sleep(500);
+        AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 600);
+        auto.getMecanumDrive().followTrajectory(alignWithCarousel);
+        auto.sleep(2500);
     }
 
 }
