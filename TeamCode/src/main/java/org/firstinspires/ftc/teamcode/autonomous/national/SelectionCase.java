@@ -15,7 +15,10 @@ public class SelectionCase {
     Side side;
     ForcedCase forcedCase;
 
+    Trajectory deliverPreloadBox,goToCarousel,alignWithCarousel,storageUnitPark;
+
     int armGoTo;
+    int sign;
 
     public SelectionCase(FrenzySelection auto, int armGoTo) {
         this.auto = auto;
@@ -24,6 +27,24 @@ public class SelectionCase {
         this.forcedCase = forcedCase;
     }
 
+    private void initializeTrajectories() {
+        sign = 1;
+        if(side == Side.BLUE) sign = -1;
+        deliverPreloadBox = auto.getMecanumDrive()
+                .trajectoryBuilder(new Pose2d())
+                .lineTo(new Vector2d(15, sign * (-31)))
+                .build();
+        goToCarousel = auto.getMecanumDrive()
+                .trajectoryBuilder(deliverPreloadBox.end())
+                .lineToLinearHeading(new Pose2d(5,sign * 20,Math.toRadians(sign * (-90))))
+                .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
+                .build();
+        alignWithCarousel = auto.getMecanumDrive()
+                .trajectoryBuilder(goToCarousel.end())
+                .back(8)
+                .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
+                .build();
+    }
     public void runAuto() {
 
     }
