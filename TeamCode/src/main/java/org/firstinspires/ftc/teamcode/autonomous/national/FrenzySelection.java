@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.ForcedCase;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.ParkingLocation;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -18,6 +19,7 @@ public class FrenzySelection extends LinearOpMode {
 
     Side side = Side.RED;
     ForcedCase forcedCase = ForcedCase.DETECTION;
+    ParkingLocation parkingLocation = ParkingLocation.STORAGE;
 
     RobotDefinition robot;
     SampleMecanumDrive mecanumDrive;
@@ -30,6 +32,7 @@ public class FrenzySelection extends LinearOpMode {
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
             new SelectionCase(this, 500).runAuto();
+            sleep(30000);
         }
     }
 
@@ -46,6 +49,7 @@ public class FrenzySelection extends LinearOpMode {
         LISTA OPTIUNI (IDs)
         1 - Parte
         2 - Caz fortat
+        3 - Parcare
      */
 
     private void selectOptions(){
@@ -82,6 +86,12 @@ public class FrenzySelection extends LinearOpMode {
                         newCase = 0;
                     forcedCase = ForcedCase.values()[newCase];
                     break;
+                case 3:
+                    int newParking = parkingLocation.ordinal() + 1;
+                    if(newParking == parkingLocation.values().length)
+                        newParking = 0;
+                    parkingLocation = ParkingLocation.values()[newParking];
+                    break;
             }
         }
     }
@@ -90,6 +100,7 @@ public class FrenzySelection extends LinearOpMode {
         telemetry.addData("", "------Options------");
         telemetry.addData("Side", side.toString() + (cursorOption == 1 ? " <-" : ""));
         telemetry.addData("Forced Case", forcedCase.toString() + (cursorOption == 2 ? " <-" : ""));
+        telemetry.addData("Parking", parkingLocation.toString() + (cursorOption == 2 ? " <-" : ""));
         telemetry.addData("", "------Info------");
         telemetry.addData("Cycle vertical", "DPAD DOWN");
         telemetry.addData("Cycle horizontal", "DPAD RIGHT");
@@ -113,4 +124,7 @@ public class FrenzySelection extends LinearOpMode {
         return forcedCase;
     }
 
+    public ParkingLocation getParkingLocation() {
+        return parkingLocation;
+    }
 }
