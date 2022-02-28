@@ -23,6 +23,7 @@ public class FrenzySelection extends LinearOpMode {
 
     RobotDefinition robot;
     SampleMecanumDrive mecanumDrive;
+    FrenzyCamera frenzyCamera;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -41,6 +42,7 @@ public class FrenzySelection extends LinearOpMode {
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
         AutoUtil.setClawOpen(robot.getExcavator(), true);
+        frenzyCamera = new FrenzyCamera();
     }
 
     int cursorOption = 1;

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.autonomous.cases.noautocube.UniversalCase3;
 import org.firstinspires.ftc.teamcode.autonomous.detection.CameraAdjusting;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.opencv.core.Core;
@@ -49,9 +50,7 @@ public class FrenzyCamera{
     private static int valMid = 0;
     private static int valLeft = 0;
     private static int valRight = 0;
-    private static int valMidLow = 0;
-    private static int valLeftLow = 0;
-    private static int valRightLow = 0;
+    private static int valMobile = 0;
 
     private static float rectHeight = .8f/8f;
     private static float rectWidth = 1.2f/8f;
@@ -62,10 +61,8 @@ public class FrenzyCamera{
     public static double[] midPos = {4.3/8.0+offsetX, 1.4/8.0+offsetY};//0 = col, 1 = row
     public static double[] leftPos = {1/8.0+offsetX, 1.2/8.0+offsetY}; // era 2
     public static double[] rightPos = {7.7/8.0+offsetX, 1.6/8.0+offsetY}; // era 6
+    public static double[] mobilePos = {4.3/8.0+offsetX, 1.0/8.0+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
-    public static double[] midPosLow = {4/8.0+offsetX, 6/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPosLow = {0.4/8.0+offsetX, 6/8.0+offsetY}; // era 2
-    public static double[] rightPosLow = {7.6/8.0+offsetX, 6/8.0+offsetY}; // era 6
 
     private final int rows = 1280; //640 x 480
     private final int cols = 720;
@@ -144,35 +141,21 @@ public class FrenzyCamera{
             double[] pixRight = thresholdMat.get((int)(input.rows()* rightPos[1]), (int)(input.cols()* rightPos[0]));//gets value at circle
             valRight = (int)pixRight[0];
 
+            double[] pixMobile = thresholdMat.get((int)(input.rows()* mobilePos[1]), (int)(input.cols()* mobilePos[0]));//gets value at circle
+            valMobile = (int)pixMobile[0];
+
             //create three points
             Point pointMid = new Point((int)(input.cols()* midPos[0]), (int)(input.rows()* midPos[1]));
             Point pointLeft = new Point((int)(input.cols()* leftPos[0]), (int)(input.rows()* leftPos[1]));
             Point pointRight = new Point((int)(input.cols()* rightPos[0]), (int)(input.rows()* rightPos[1]));
+            Point pointMobile = new Point((int)(input.cols()* mobilePos[0]), (int)(input.rows()* mobilePos[1]));
+
 
             //draw circles on those points
             Imgproc.circle(all, pointMid,5, new Scalar( 255, 0, 0 ),1 );//draws circle
             Imgproc.circle(all, pointLeft,5, new Scalar( 255, 0, 0 ),1 );//draws circle
             Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
-
-            //get values from frame
-            double[] pixMidLow = thresholdMat.get((int)(input.rows()* midPosLow[1]), (int)(input.cols()* midPosLow[0]));//gets value at circle
-            valMidLow = (int)pixMidLow[0];
-
-            double[] pixLeftLow = thresholdMat.get((int)(input.rows()* leftPosLow[1]), (int)(input.cols()* leftPosLow[0]));//gets value at circle
-            valLeftLow = (int)pixLeftLow[0];
-
-            double[] pixRightLow = thresholdMat.get((int)(input.rows()* rightPosLow[1]), (int)(input.cols()* rightPosLow[0]));//gets value at circle
-            valRightLow = (int)pixRightLow[0];
-
-            //create three points
-            Point pointMidLow = new Point((int)(input.cols()* midPosLow[0]), (int)(input.rows()* midPosLow[1]));
-            Point pointLeftLow = new Point((int)(input.cols()* leftPosLow[0]), (int)(input.rows()* leftPosLow[1]));
-            Point pointRightLow = new Point((int)(input.cols()* rightPosLow[0]), (int)(input.rows()* rightPosLow[1]));
-
-            //draw circles on those points
-            Imgproc.circle(all, pointMidLow,5, new Scalar( 255, 255, 0 ),1 );//draws circle
-            Imgproc.circle(all, pointLeftLow,5, new Scalar( 255, 255, 0 ),1 );//draws circle
-            Imgproc.circle(all, pointRightLow,5, new Scalar( 255, 255, 0 ),1 );//draws ci
+            Imgproc.circle(all, pointMobile,5, new Scalar( 255, 0, 0 ),1 );//draws circle
 
             //draw 3 rectangles
             Imgproc.rectangle(//1-3
@@ -202,35 +185,15 @@ public class FrenzyCamera{
                             input.cols()*(rightPos[0]+rectWidth/2),
                             input.rows()*(rightPos[1]+rectHeight/2)),
                     new Scalar(0, 255, 0), 4);
-
-            //draw 3 rectangles
-            Imgproc.rectangle(//1-3
-                    all,
-                    new Point(
-                            input.cols()*(leftPosLow[0]-rectWidth/2),
-                            input.rows()*(leftPosLow[1]-rectHeight/2)),
-                    new Point(
-                            input.cols()*(leftPosLow[0]+rectWidth/2),
-                            input.rows()*(leftPosLow[1]+rectHeight/2)),
-                    new Scalar(255, 0, 0), 2);
-            Imgproc.rectangle(//3-5
-                    all,
-                    new Point(
-                            input.cols()*(midPosLow[0]-rectWidth/2),
-                            input.rows()*(midPosLow[1]-rectHeight/2)),
-                    new Point(
-                            input.cols()*(midPosLow[0]+rectWidth/2),
-                            input.rows()*(midPosLow[1]+rectHeight/2)),
-                    new Scalar(255, 0, 0), 2);
             Imgproc.rectangle(//5-7
                     all,
                     new Point(
-                            input.cols()*(rightPosLow[0]-rectWidth/2),
-                            input.rows()*(rightPosLow[1]-rectHeight/2)),
+                            input.cols()*(mobilePos[0]-rectWidth/2),
+                            input.rows()*(mobilePos[1]-rectHeight/2)),
                     new Point(
-                            input.cols()*(rightPosLow[0]+rectWidth/2),
-                            input.rows()*(rightPosLow[1]+rectHeight/2)),
-                    new Scalar(255, 0, 0), 2);
+                            input.cols()*(mobilePos[0]+rectWidth/2),
+                            input.rows()*(mobilePos[1]+rectHeight/2)),
+                    new Scalar(255, 0, 0), 4);
 
             switch (stageToRenderToViewport)
             {
@@ -258,16 +221,27 @@ public class FrenzyCamera{
 
     }
 
+    public double searchFreight(Side side, double searchInterval){
+        double rectX = mobilePos[0];
+        double distance = 0;
+        if(side == Side.BLUE) {
+            while (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
+                mobilePos[0] += searchInterval;
+                distance += searchInterval;
+            }
+            mobilePos[0] = rectX;
+        } else{ //asta nu e facut
+            while (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
+                mobilePos[0] += searchInterval;
+                distance += searchInterval;
+            }
+            mobilePos[0] = rectX;
+        }
+        return distance;
+    }
+
     public ElapsedTime getRuntimeElapsed() {
         return runtime;
-    }
-
-    public static int getValLeftLow() {
-        return valLeftLow;
-    }
-
-    public static int getValMidLow() {
-        return valMidLow;
     }
 
     public int getRows() {
@@ -290,8 +264,7 @@ public class FrenzyCamera{
         return valRight;
     }
 
-    public static int getValRightLow() {
-        return valRightLow;
+    public static int getValMobile() {
+        return valMobile;
     }
-
 }
