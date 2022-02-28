@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.autonomous.national.option.ParkingLocation
 import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name= "Frenzy Selection")
 public class FrenzySelection extends LinearOpMode {
@@ -34,18 +35,23 @@ public class FrenzySelection extends LinearOpMode {
         runtime.reset();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
+            /*
             int armGoTo = 1250;
             if(frenzyCamera.getValRight() != 0)
                 armGoTo = 1825;
             else if(frenzyCamera.getValLeft() != 0)
                 armGoTo = 650;
             new SelectionCase(this, armGoTo).runAuto();
-            sleep(30000);
-
-            /*
-            double search = frenzyCamera.searchFreight(Side.BLUE, 0.1);
-            Trajectory traj = mecanumDrive.get.strafeRight(search);
              */
+
+            double search = frenzyCamera.searchFreight(Side.BLUE, 0.1);
+            TrajectorySequence trajSeq = mecanumDrive.trajectorySequenceBuilder(new Pose2d())
+                    .strafeRight(search)
+                    .forward(10)
+                    .build();
+            mecanumDrive.followTrajectorySequence(trajSeq);
+
+            sleep(30000);
         }
     }
 
