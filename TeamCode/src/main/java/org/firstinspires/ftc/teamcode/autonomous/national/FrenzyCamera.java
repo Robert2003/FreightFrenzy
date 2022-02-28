@@ -220,24 +220,36 @@ public class FrenzyCamera{
         }
 
     }
-
+    public double searchVal (Side side, double rectX, double searchInterval, double distance) {
+        if (side == Side.BLUE) {
+            if (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
+                mobilePos[0] += searchInterval;
+                distance += searchInterval;
+                return searchVal(side, rectX, searchInterval, distance);
+            }
+            else
+            {
+                mobilePos[0] = rectX;
+                return distance;
+            }
+        }
+        else
+        {
+            if (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
+                mobilePos[0] += searchInterval;
+                distance += searchInterval;
+                return searchVal(side, rectX, searchInterval, distance);
+            }
+            else {
+                mobilePos[0] = rectX;
+                return distance;
+            }
+        }
+    }
     public double searchFreight(Side side, double searchInterval){
         double rectX = mobilePos[0];
         double distance = 0;
-        if(side == Side.BLUE) {
-            while (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
-                mobilePos[0] += searchInterval;
-                distance += searchInterval;
-            }
-            mobilePos[0] = rectX;
-        } else{ //asta nu e facut
-            while (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
-                mobilePos[0] += searchInterval;
-                distance += searchInterval;
-            }
-            mobilePos[0] = rectX;
-        }
-        return distance;
+        return searchVal(side, rectX, searchInterval, distance);
     }
 
     public ElapsedTime getRuntimeElapsed() {
