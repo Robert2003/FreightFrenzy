@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous.national;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -32,8 +34,18 @@ public class FrenzySelection extends LinearOpMode {
         runtime.reset();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
-            new SelectionCase(this, 500).runAuto();
-            //sleep(30000);
+            int armGoTo = 1250;
+            if(frenzyCamera.getValRight() != 0)
+                armGoTo = 1825;
+            else if(frenzyCamera.getValLeft() != 0)
+                armGoTo = 650;
+            new SelectionCase(this, armGoTo).runAuto();
+            sleep(30000);
+
+            /*
+            double search = frenzyCamera.searchFreight(Side.BLUE, 0.1);
+            Trajectory traj = mecanumDrive.get.strafeRight(search);
+             */
         }
     }
 
