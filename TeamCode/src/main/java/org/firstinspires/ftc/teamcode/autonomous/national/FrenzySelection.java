@@ -33,7 +33,7 @@ public class FrenzySelection extends LinearOpMode {
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
             new SelectionCase(this, 500).runAuto();
-            sleep(30000);
+            //sleep(30000);
         }
     }
 

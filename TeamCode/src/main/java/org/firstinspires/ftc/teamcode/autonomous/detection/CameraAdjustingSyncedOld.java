@@ -37,9 +37,9 @@ import java.util.List;
  * monitor: 640 x 480
  * YES
  */
-@Autonomous(name = "Camera Adjusting Synced", group = "Ajustare Joc")
+@Autonomous(name = "Camera Adjusting Synced Old", group = "Ajustare Joc")
 //@Disabled//comment out this line before using
-public class CameraAdjustingSynced extends LinearOpMode {
+public class CameraAdjustingSyncedOld extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 

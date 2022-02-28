@@ -24,6 +24,10 @@ public class SelectionCase {
         this.armGoTo = armGoTo;
         this.side = auto.getSide();
         this.forcedCase = auto.getForcedCase();
+
+        // forced cases
+        side = Side.BLUE;
+
         initializeTrajectories();
     }
 
@@ -32,7 +36,7 @@ public class SelectionCase {
         if(side == Side.BLUE) sign = -1;
         deliverPreloadBox = auto.getMecanumDrive()
                 .trajectoryBuilder(new Pose2d())
-                .lineTo(new Vector2d(15, sign * (-31)))
+                .lineTo(new Vector2d( 17, sign * (-31)))
                 .build();
         goToCarousel = auto.getMecanumDrive()
                 .trajectoryBuilder(deliverPreloadBox.end())
