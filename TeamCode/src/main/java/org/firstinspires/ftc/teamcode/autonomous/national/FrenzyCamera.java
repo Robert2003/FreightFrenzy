@@ -220,6 +220,8 @@ public class FrenzyCamera{
         }
 
     }
+
+    /*
     public double searchVal (Side side, double rectX, double searchInterval, double distance) {
         if (side == Side.BLUE) {
             if (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
@@ -251,6 +253,7 @@ public class FrenzyCamera{
         double distance = 0;
         return searchVal(side, rectX, searchInterval, distance);
     }
+     */
 
     public ElapsedTime getRuntimeElapsed() {
         return runtime;

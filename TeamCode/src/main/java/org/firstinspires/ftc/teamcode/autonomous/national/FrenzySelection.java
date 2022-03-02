@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.ForcedCase;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.ParkingLocation;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.TeamCompatible;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -23,6 +24,7 @@ public class FrenzySelection extends LinearOpMode {
     Side side = Side.RED;
     ForcedCase forcedCase = ForcedCase.DETECTION;
     ParkingLocation parkingLocation = ParkingLocation.STORAGE;
+    TeamCompatible teamCompatible = TeamCompatible.NONE;
 
     RobotDefinition robot;
     SampleMecanumDrive mecanumDrive;
@@ -35,22 +37,14 @@ public class FrenzySelection extends LinearOpMode {
         runtime.reset();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
-            /*
             int armGoTo = 1250;
             if(frenzyCamera.getValRight() != 0)
                 armGoTo = 1825;
             else if(frenzyCamera.getValLeft() != 0)
                 armGoTo = 650;
             new SelectionCase(this, armGoTo).runAuto();
-             */
-
-            double search = frenzyCamera.searchFreight(Side.BLUE, 0.1);
-            TrajectorySequence trajSeq = mecanumDrive.trajectorySequenceBuilder(new Pose2d())
-                    .strafeRight(search)
-                    .forward(10)
-                    .build();
-            mecanumDrive.followTrajectorySequence(trajSeq);
-
+            telemetry.addData("Case", armGoTo);
+            telemetry.update();
             sleep(30000);
         }
     }
@@ -70,6 +64,7 @@ public class FrenzySelection extends LinearOpMode {
         1 - Parte
         2 - Caz fortat
         3 - Parcare
+        4 - Special compatibil
      */
 
     private void selectOptions(){
@@ -146,5 +141,9 @@ public class FrenzySelection extends LinearOpMode {
 
     public ParkingLocation getParkingLocation() {
         return parkingLocation;
+    }
+
+    public TeamCompatible getTeamCompatible() {
+        return teamCompatible;
     }
 }
