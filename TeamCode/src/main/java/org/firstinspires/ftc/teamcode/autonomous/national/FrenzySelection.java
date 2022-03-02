@@ -58,7 +58,7 @@ public class FrenzySelection extends LinearOpMode {
     }
 
     int cursorOption = 1;
-    int navigatingDelay = 1500;
+    int navigatingDelay = 1000;
     /*
         LISTA OPTIUNI (IDs)
         1 - Parte
