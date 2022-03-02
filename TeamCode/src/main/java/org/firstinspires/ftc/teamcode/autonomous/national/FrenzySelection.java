@@ -84,7 +84,7 @@ public class FrenzySelection extends LinearOpMode {
     private void cycleOptions(){
         if(gamepad1.dpad_down){
             cursorOption++;
-            if(cursorOption == 3)
+            if(cursorOption == 5)
                 cursorOption = 1;
         }
         if(gamepad1.dpad_right){
