@@ -131,7 +131,7 @@ public class FrenzyCamera{
             //Imgproc.drawContours(all, contoursList, -1, new Scalar(255, 0, 0), 3, 8);//draws blue contours
 
 
-            //get values from frame
+            //get values from frameculcat
             double[] pixMid = thresholdMat.get((int)(input.rows()* midPos[1]), (int)(input.cols()* midPos[0]));//gets value at circle
             valMid = (int)pixMid[0];
 
@@ -143,7 +143,6 @@ public class FrenzyCamera{
 
             double[] pixMobile = thresholdMat.get((int)(input.rows()* mobilePos[1]), (int)(input.cols()* mobilePos[0]));//gets value at circle
             valMobile = (int)pixMobile[0];
-
             //create three points
             Point pointMid = new Point((int)(input.cols()* midPos[0]), (int)(input.rows()* midPos[1]));
             Point pointLeft = new Point((int)(input.cols()* leftPos[0]), (int)(input.rows()* leftPos[1]));
@@ -220,8 +219,10 @@ public class FrenzyCamera{
         }
 
     }
-
     /*
+    public static void updatePoint() {
+    }
+
     public double searchVal (Side side, double rectX, double searchInterval, double distance) {
         if (side == Side.BLUE) {
             if (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
@@ -253,7 +254,7 @@ public class FrenzyCamera{
         double distance = 0;
         return searchVal(side, rectX, searchInterval, distance);
     }
-     */
+    */
 
     public ElapsedTime getRuntimeElapsed() {
         return runtime;

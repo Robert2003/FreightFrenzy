@@ -248,7 +248,56 @@ public class DrivingSharedTheo extends LinearOpMode {
                 moveTargets.add(currentTarget);
             }
         } else{
-
+            if (gamepad2.a) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550); //600
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1958);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.x) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550); //600
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1958);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.b) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1225); // 1000
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1958);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.y) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1825); //1660 -1300
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1958);
+                moveTargets.add(currentTarget);
+            }
+            if (gamepad2.dpad_down) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1958);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_left) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1958);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_right) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1225);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1958);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_up) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1825);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1958);
+                moveTargets.add(currentTarget);
+            }
         }
 
         if(gamepad2.right_stick_button){
