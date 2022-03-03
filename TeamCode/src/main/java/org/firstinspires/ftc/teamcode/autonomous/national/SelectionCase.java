@@ -16,7 +16,7 @@ public class SelectionCase {
     ForcedCase forcedCase;
     TeamCompatible teamCompatible;
 
-    Trajectory deliverPreloadBox,goToCarousel,alignWithCarousel,storageUnitPark,alignWithWall,enterWarehouse,exitWarehouse,goToShippingHub,alignWithWall2,strafeToPark;
+    Trajectory deliverPreloadBox,goToCarousel,alignWithCarousel,storageUnitPark,alignWithWall,enterWarehouse,exitWarehouse,goToShippingHub,alignWithWall2,strafeToPark,park;
 
     int armGoTo;
     int sign;
@@ -27,9 +27,6 @@ public class SelectionCase {
         this.side = auto.getSide();
         this.forcedCase = auto.getForcedCase();
         this.teamCompatible = auto.getTeamCompatible();
-
-        // forced cases
-        side = Side.BLUE;
 
         initializeTrajectories();
     }
@@ -58,16 +55,22 @@ public class SelectionCase {
                     .build();
             goToShippingHub = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse.end())
-                    .lineTo(new Vector2d(35,sign * 9))
+                    .lineTo(new Vector2d(30,sign * 9))
                     .addTemporalMarker(.3, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(),sign*(-1305)))
                     .build();
             alignWithWall2 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub.end())
-                    .lineToLinearHeading(new Pose2d(-55,sign * -8,Math.toRadians(sign * (-135))))
+                    .lineToLinearHeading(new Pose2d(-25,sign * -15,Math.toRadians(sign * (-210))))
+                    .addTemporalMarker(.5, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(),0))
                     .build();
             strafeToPark = auto.getMecanumDrive()
                     .trajectoryBuilder(alignWithWall2.end())
-                    .strafeLeft(sign * 20)
+                    .strafeLeft(sign * 40)
+                    .addTemporalMarker(.3,() -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),15))
+                    .build();
+            park = auto.getMecanumDrive()
+                    .trajectoryBuilder(strafeToPark.end())
+                    .lineToLinearHeading(new Pose2d(-20,sign * -50,Math.toRadians(sign * (-180))))
                     .build();
         } else {
             // ROBOT NEAR CAROUSEL
@@ -112,11 +115,8 @@ public class SelectionCase {
             AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
             auto.sleep(50);
             auto.getMecanumDrive().followTrajectory(alignWithWall2);
-            auto.sleep(100);
-            AutoUtil.armToPosition(auto.getRobot().getPlateMotor(),0);
-            auto.sleep(100);
-            AutoUtil.armToPosition(auto.getRobot().getArmMotor(),15);
             auto.getMecanumDrive().followTrajectory(strafeToPark);
+            auto.getMecanumDrive().followTrajectory(park);
         }
 
     }
