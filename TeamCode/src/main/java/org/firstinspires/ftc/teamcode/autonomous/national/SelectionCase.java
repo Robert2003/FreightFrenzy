@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.ForcedCase;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.TeamCompatible;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class SelectionCase {
 
@@ -17,6 +18,7 @@ public class SelectionCase {
     TeamCompatible teamCompatible;
 
     Trajectory deliverPreloadBox,goToCarousel,alignWithCarousel,storageUnitPark,alignWithWall,enterWarehouse,exitWarehouse,goToShippingHub,alignWithWall2,strafeToPark,park;
+    TrajectorySequence parkingSoft;
 
     int armGoTo;
     int sign;
@@ -41,7 +43,7 @@ public class SelectionCase {
                     .build();
             alignWithWall = auto.getMecanumDrive()
                     .trajectoryBuilder(deliverPreloadBox.end())
-                    .lineToLinearHeading(new Pose2d(-20,sign * 0,Math.toRadians(sign * (-135))))
+                    .lineToLinearHeading(new Pose2d(-25,sign * 0, Math.toRadians(sign * (-135))))
                     .addTemporalMarker(.5, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),15))
                     .build();
             enterWarehouse = auto.getMecanumDrive()
@@ -60,9 +62,17 @@ public class SelectionCase {
                     .build();
             alignWithWall2 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub.end())
-                    .lineToLinearHeading(new Pose2d(-25,sign * -15,Math.toRadians(sign * (-210))))
+                    .lineToLinearHeading(new Pose2d(-18,sign * 10,Math.toRadians(sign * (-150))))
+                    .addTemporalMarker(.6, () -> AutoUtil.plateToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .addTemporalMarker(.5, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(),0))
                     .build();
+            parkingSoft = auto.getMecanumDrive().trajectorySequenceBuilder(alignWithWall2.end())
+                    .forward(20)
+                    .strafeLeft(sign * 32)
+                    .forward(18)
+                    .turn(Math.toRadians(sign * -135))
+                    .build();
+            /*
             strafeToPark = auto.getMecanumDrive()
                     .trajectoryBuilder(alignWithWall2.end())
                     .strafeLeft(sign * 40)
@@ -72,6 +82,7 @@ public class SelectionCase {
                     .trajectoryBuilder(strafeToPark.end())
                     .lineToLinearHeading(new Pose2d(-20,sign * -50,Math.toRadians(sign * (-180))))
                     .build();
+             */
         } else {
             // ROBOT NEAR CAROUSEL
             deliverPreloadBox = auto.getMecanumDrive()
@@ -106,17 +117,16 @@ public class SelectionCase {
             auto.getMecanumDrive().followTrajectory(deliverPreloadBox);
             AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
             auto.getMecanumDrive().followTrajectory(alignWithWall);
-            auto.sleep(50);
+            //auto.sleep(50);
             auto.getMecanumDrive().followTrajectory(enterWarehouse);
-            auto.sleep(100);
+            //auto.sleep(100);
             AutoUtil.setClawOpen(auto.getRobot().getExcavator(), false);
             auto.getMecanumDrive().followTrajectory(exitWarehouse);
             auto.getMecanumDrive().followTrajectory(goToShippingHub);
             AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
-            auto.sleep(50);
+            //auto.sleep(50);
             auto.getMecanumDrive().followTrajectory(alignWithWall2);
-            auto.getMecanumDrive().followTrajectory(strafeToPark);
-            auto.getMecanumDrive().followTrajectory(park);
+            auto.getMecanumDrive().followTrajectorySequence(parkingSoft);
         }
 
     }
