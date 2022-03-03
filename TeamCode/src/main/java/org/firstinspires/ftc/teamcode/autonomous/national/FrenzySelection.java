@@ -58,7 +58,7 @@ public class FrenzySelection extends LinearOpMode {
     }
 
     int cursorOption = 1;
-    int navigatingDelay = 1000;
+    int navigatingDelay = 600;
     /*
         LISTA OPTIUNI (IDs)
         1 - Parte
@@ -84,7 +84,7 @@ public class FrenzySelection extends LinearOpMode {
     private void cycleOptions(){
         if(gamepad1.dpad_down){
             cursorOption++;
-            if(cursorOption == 3)
+            if(cursorOption == 5)
                 cursorOption = 1;
         }
         if(gamepad1.dpad_right){
