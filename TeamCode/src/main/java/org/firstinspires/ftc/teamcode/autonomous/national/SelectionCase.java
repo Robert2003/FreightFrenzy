@@ -41,7 +41,7 @@ public class SelectionCase {
         if(teamCompatible == TeamCompatible.SOFT_DELTA) {
             deliverPreloadBox = auto.getMecanumDrive()
                     .trajectoryBuilder(new Pose2d())
-                    .lineTo(new Vector2d( 17, sign * 28))
+                    .lineTo(new Vector2d( 18, sign * 25))
                     .build();
             alignWithWall = auto.getMecanumDrive()
                     .trajectoryBuilder(deliverPreloadBox.end())
