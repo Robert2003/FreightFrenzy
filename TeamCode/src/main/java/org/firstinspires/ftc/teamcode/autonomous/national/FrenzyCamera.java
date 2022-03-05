@@ -59,7 +59,7 @@ public class FrenzyCamera{
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
     public static double[] midPos = {4.3/8.0+offsetX, 1.4/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {1/8.0+offsetX, 1.2/8.0+offsetY}; // era 2
+    public static double[] leftPos = {0.7/8.0+offsetX, 1.2/8.0+offsetY}; // era 2
     public static double[] rightPos = {7.7/8.0+offsetX, 1.6/8.0+offsetY}; // era 6
     public static double[] mobilePos = {4.3/8.0+offsetX, 1.0/8.0+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor

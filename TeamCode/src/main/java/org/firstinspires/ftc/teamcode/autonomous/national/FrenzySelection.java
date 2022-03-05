@@ -34,9 +34,9 @@ public class FrenzySelection extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         initialize();
         selectOptions();
-        runtime.reset();
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
+            runtime.reset();
             int armGoTo = 1250;
             if (frenzyCamera.getValRight() != 0 || forcedCase == ForcedCase.HIGH)
                 armGoTo = 1825;
@@ -153,4 +153,9 @@ public class FrenzySelection extends LinearOpMode {
     public TeamCompatible getTeamCompatible() {
         return teamCompatible;
     }
+
+    public ElapsedTime getElapsed() {
+        return runtime;
+    }
+
 }

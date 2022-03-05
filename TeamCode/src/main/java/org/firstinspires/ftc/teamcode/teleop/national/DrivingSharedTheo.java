@@ -153,12 +153,9 @@ public class DrivingSharedTheo extends LinearOpMode {
         }
 
         if(gamepad1.y){
-            long currentTimeSec = System.currentTimeMillis() / 1000;
-            if(currentTimeSec - lastSwitchTimeSec >= 2) {
-                sharedControls = !sharedControls;
-                currentTimeSec = System.currentTimeMillis() / 1000;
-            }
-        }
+            sharedControls = true;
+        } else if(gamepad1.x)
+            sharedControls = false;
 
         mecanumDrive.update();
     }
