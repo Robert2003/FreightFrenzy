@@ -20,7 +20,7 @@ public class SelectionCase {
     TeamCompatible teamCompatible;
 
     Trajectory deliverPreloadBox,goToCarousel,alignWithCarousel,storageUnitPark,alignWithWall,enterWarehouse,exitWarehouse,goToShippingHub,alignWithWall2,strafeToPark,park;
-    TrajectorySequence parkingSoft,goToPark,goToWare;
+    TrajectorySequence parkingSoft,goToPark,goToWare,getCube;
 
     int armGoTo;
     int sign;
@@ -85,6 +85,47 @@ public class SelectionCase {
                     .lineToLinearHeading(new Pose2d(-20,sign * -50,Math.toRadians(sign * (-180))))
                     .build();
              */
+        } else if(teamCompatible == TeamCompatible.BAG_UN_CARRY) {
+            deliverPreloadBox = auto.getMecanumDrive()
+                    .trajectoryBuilder(new Pose2d())
+                    .lineTo(new Vector2d(18, sign * 25))
+                    .build();
+            alignWithWall = auto.getMecanumDrive()
+                    .trajectoryBuilder(deliverPreloadBox.end())
+                    .lineToSplineHeading(new Pose2d(-26, sign * 0, Math.toRadians(sign * (-150))))
+                    .addTemporalMarker(.5, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 15))
+                    .build(); // era lineToLinearHeading x: -25 y: 0 h: -135
+            enterWarehouse = auto.getMecanumDrive()
+                    .trajectoryBuilder(alignWithWall.end())
+                    .forward(20)
+                    .build();
+            exitWarehouse = auto.getMecanumDrive()
+                    .trajectoryBuilder(enterWarehouse.end())
+                    .back(30)
+                    .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(), 1825))
+                    .build();
+            goToShippingHub = auto.getMecanumDrive()
+                    .trajectoryBuilder(exitWarehouse.end())
+                    .lineTo(new Vector2d(30, sign * -5))
+                    .addTemporalMarker(.3, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(), sign * (-1305)))
+                    .build();
+            alignWithWall2 = auto.getMecanumDrive()
+                    .trajectoryBuilder(goToShippingHub.end())
+                    .lineToLinearHeading(new Pose2d(-18, sign * 10, Math.toRadians(sign * (-150))))
+                    .addTemporalMarker(.6, () -> AutoUtil.plateToPosition(auto.getRobot().getArmMotor(), auto.getRobot().getZeroArm()))
+                    .addTemporalMarker(.5, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(), 0))
+                    .build();
+            getCube = auto.getMecanumDrive()
+                    .trajectorySequenceBuilder(alignWithWall2.end())
+                    .turn(Math.toRadians(sign * 15))
+                    .forward(20)
+                    .build();
+            parkingSoft = auto.getMecanumDrive().trajectorySequenceBuilder(alignWithWall2.end())
+                    .forward(25)
+                    .strafeLeft(sign * 32)
+                    .forward(18)
+                    .turn(Math.toRadians(sign * -135))
+                    .build();
         } else {
             // ROBOT NEAR CAROUSEL
             deliverPreloadBox = auto.getMecanumDrive()

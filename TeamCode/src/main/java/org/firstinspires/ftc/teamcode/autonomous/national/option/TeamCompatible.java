@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.national.option;
 public enum TeamCompatible {
 
     NONE,
-    SOFT_DELTA
+    SOFT_DELTA,
+    BAG_UN_CARRY
 
 }

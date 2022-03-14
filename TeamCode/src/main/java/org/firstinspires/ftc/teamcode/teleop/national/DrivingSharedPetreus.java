@@ -213,8 +213,34 @@ public class DrivingSharedPetreus extends LinearOpMode {
                 moveTargets.add(currentTarget);
                 currentTarget = new MoveTarget(plateMotor, 1305);
                 moveTargets.add(currentTarget);
+            } else if (gamepad2.a) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 0);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(armMotor, 15);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.x) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.b){
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1225);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.y){
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1825);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
             }
-        } else{
+        } else {
             if (gamepad2.dpad_down) {
                 resetTargets();
                 currentTarget = new MoveTarget(plateMotor, 0);
