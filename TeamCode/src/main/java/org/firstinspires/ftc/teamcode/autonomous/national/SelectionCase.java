@@ -20,7 +20,7 @@ public class SelectionCase {
     TeamCompatible teamCompatible;
 
     Trajectory deliverPreloadBox,goToCarousel,alignWithCarousel,storageUnitPark,alignWithWall,enterWarehouse,exitWarehouse,goToShippingHub,alignWithWall2,strafeToPark,park;
-    TrajectorySequence parkingSoft,goToPark,goToWare,getCube;
+    TrajectorySequence parkingSoft,goToPark,goToWare,getCube,collectDuck;
 
     int armGoTo;
     int sign;
@@ -41,13 +41,13 @@ public class SelectionCase {
         if(teamCompatible == TeamCompatible.SOFT_DELTA) {
             deliverPreloadBox = auto.getMecanumDrive()
                     .trajectoryBuilder(new Pose2d())
-                    .lineTo(new Vector2d( 18, sign * 25))
+                    .lineToLinearHeading(new Pose2d( 18, sign * 17, Math.toRadians(sign * (45))))
                     .build();
             alignWithWall = auto.getMecanumDrive()
                     .trajectoryBuilder(deliverPreloadBox.end())
-                    .lineToSplineHeading(new Pose2d(-26,sign * 0, Math.toRadians(sign * (-150))))
+                    .lineToLinearHeading(new Pose2d(-16,sign * 0, Math.toRadians(sign * (-130))))
                     .addTemporalMarker(.5, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),15))
-                    .build(); // era lineToLinearHeading x: -25 y: 0 h: -135
+                    .build();
             enterWarehouse = auto.getMecanumDrive()
                     .trajectoryBuilder(alignWithWall.end())
                     .forward(20)
@@ -108,6 +108,8 @@ public class SelectionCase {
                     .trajectorySequenceBuilder(alignWithWall2.end())
                     .turn(Math.toRadians(sign * 15))
                     .forward(20)
+                    .addTemporalMarker(.5, () -> AutoUtil.setClawOpen(auto.getRobot().getExcavator(), false))
+                    .back(30)
                     .build();
             parkingSoft = auto.getMecanumDrive().trajectorySequenceBuilder(alignWithWall2.end())
                     .forward(25)
@@ -123,15 +125,27 @@ public class SelectionCase {
                     .build();
             goToCarousel = auto.getMecanumDrive()
                     .trajectoryBuilder(deliverPreloadBox.end())
-                    .lineToLinearHeading(new Pose2d(10,sign * 20,Math.toRadians(sign * (-90))))
+                    .lineToLinearHeading(new Pose2d(5,sign * 20,Math.toRadians(sign * (-135))),
+                            SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
                     .build();
             alignWithCarousel = auto.getMecanumDrive()
                     .trajectoryBuilder(goToCarousel.end())
-                    .back(16,
-                            SampleMecanumDrive.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                    .back(10,
+                            SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
+                    .build();
+            collectDuck = auto.getMecanumDrive().trajectorySequenceBuilder(alignWithCarousel.end())
+                    .strafeLeft(10)
+                    .turn(Math.toRadians(sign * 30))
+                    .forward(25)
+                    .turn(Math.toRadians(sign * -240))
+                    .strafeLeft(sign * 17)
+                    .forward(20)
+                    .back(2)
+                    .addTemporalMarker(() -> AutoUtil.setClawOpen(auto.getRobot().getExcavator(),true))
                     .build();
             park = auto.getMecanumDrive()
                     .trajectoryBuilder(alignWithCarousel.end())
@@ -170,6 +184,7 @@ public class SelectionCase {
             auto.getMecanumDrive().followTrajectory(alignWithCarousel);
             AutoUtil.armToPosition(auto.getRobot().getArmMotor(), auto.getRobot().getZeroArm());
             auto.sleep(3000);
+            auto.getMecanumDrive().followTrajectorySequence(collectDuck);
             auto.getMecanumDrive().followTrajectory(park);
             AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), 0);
         }
