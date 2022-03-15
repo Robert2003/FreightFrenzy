@@ -84,7 +84,7 @@ public class FrenzySelection extends LinearOpMode {
     private void cycleOptions(){
         if(gamepad1.dpad_down){
             cursorOption++;
-            if(cursorOption == 5)
+            if(cursorOption == 4)
                 cursorOption = 1;
         }
         if(gamepad1.dpad_right){
@@ -100,6 +100,7 @@ public class FrenzySelection extends LinearOpMode {
                     if(newCase == ForcedCase.values().length)
                         newCase = 0;
                     forcedCase = ForcedCase.values()[newCase];
+                    break;
                 case 3:
                     int newCompatible = teamCompatible.ordinal() + 1;
                     if(newCompatible == TeamCompatible.values().length)
