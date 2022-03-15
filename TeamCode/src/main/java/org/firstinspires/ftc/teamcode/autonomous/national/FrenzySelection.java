@@ -100,16 +100,9 @@ public class FrenzySelection extends LinearOpMode {
                     if(newCase == ForcedCase.values().length)
                         newCase = 0;
                     forcedCase = ForcedCase.values()[newCase];
-                    break;
                 case 3:
-                    int newParking = parkingLocation.ordinal() + 1;
-                    if(newParking == parkingLocation.values().length)
-                        newParking = 0;
-                    parkingLocation = ParkingLocation.values()[newParking];
-                    break;
-                case 4:
                     int newCompatible = teamCompatible.ordinal() + 1;
-                    if(newCompatible == teamCompatible.values().length)
+                    if(newCompatible == TeamCompatible.values().length)
                         newCompatible = 0;
                     teamCompatible = TeamCompatible.values()[newCompatible];
                     break;
@@ -121,8 +114,7 @@ public class FrenzySelection extends LinearOpMode {
         telemetry.addData("", "------Options------");
         telemetry.addData("Side", side.toString() + (cursorOption == 1 ? " <-" : ""));
         telemetry.addData("Forced Case", forcedCase.toString() + (cursorOption == 2 ? " <-" : ""));
-        telemetry.addData("Parking", parkingLocation.toString() + (cursorOption == 3 ? " <-" : ""));
-        telemetry.addData("Compatible", teamCompatible.toString() + (cursorOption == 4 ? " <-" : ""));
+        telemetry.addData("Compatible", teamCompatible.toString() + (cursorOption == 3 ? " <-" : ""));
         telemetry.addData("", "------Info------");
         telemetry.addData("Cycle vertical", "DPAD DOWN");
         telemetry.addData("Cycle horizontal", "DPAD RIGHT");

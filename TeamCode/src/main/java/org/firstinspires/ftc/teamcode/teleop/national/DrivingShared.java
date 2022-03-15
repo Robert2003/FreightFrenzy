@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.teleop.national;
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,9 +16,8 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import java.util.LinkedList;
 import java.util.Queue;
 
-@Disabled
 @TeleOp(group = "Driving")
-public class DrivingTheo extends LinearOpMode {
+public class DrivingShared extends LinearOpMode {
 
     RobotDefinition robot;
 
@@ -32,6 +30,8 @@ public class DrivingTheo extends LinearOpMode {
     SampleMecanumDrive mecanumDrive;
 
     ElapsedTime runtime = new ElapsedTime();
+
+    boolean sharedControls = false;
 
     private class MoveTarget {
         private DcMotorEx motor;
@@ -70,17 +70,7 @@ public class DrivingTheo extends LinearOpMode {
         armMotor = robot.getArmMotor();
         flyWheel = robot.getFlyWheel();
 
-        /*
-        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
-        frontRightMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
-        rearLeftMotor = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rearRightMotor = hardwareMap.get(DcMotorEx.class, "rightRear");
-         */
-
         excavator = robot.getExcavator();
-
-        //frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //rearRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         plateMotor.setZeroPowerBehavior(BRAKE);
         armMotor.setZeroPowerBehavior(BRAKE);
@@ -112,6 +102,7 @@ public class DrivingTheo extends LinearOpMode {
     }
 
     private void debugTelemetry() {
+        telemetry.addData("Controls", sharedControls ? "SHARED" : "VANILLA");
         telemetry.addData("PoseX", mecanumDrive.getPoseEstimate().getX());
         telemetry.addData("PoseY", mecanumDrive.getPoseEstimate().getY());
         telemetry.addData("Arm", armMotor.getCurrentPosition());
@@ -129,49 +120,9 @@ public class DrivingTheo extends LinearOpMode {
 
     double swp, ms; //suppressed wheel power
 
+    long lastSwitchTimeSec = 0;
+
     private void controlDriving() {
-        /**drive = gamepad1.right_stick_x;
-         strafe = -gamepad1.right_stick_y;
-         rotate = -gamepad1.right_trigger + gamepad1.left_trigger;
-
-         telemetry.addData("drive", drive);
-         telemetry.addData("strafe", strafe);
-         telemetry.addData("rotate", rotate);
-         telemetry.update();
-
-         frontLeftPower = strafe + drive + rotate;
-         rearLeftPower = strafe + drive - rotate;
-         rearRightPower = strafe - drive + rotate;
-         frontRightPower = strafe - drive - rotate;
-
-         /*double powerFrontLeft = y + x + rx;
-         double powerFrontRight = y - x - rx;
-         double powerBackLeft = y - x + rx;
-         double powerBackRight = y + x - rx;
-
-         rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
-         rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
-         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
-         frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
-
-         if (gamepad1.right_bumper) {
-         rearLeftPower *= 0.5;
-         rearRightPower *= 0.5;
-         frontLeftPower *= 0.5;
-         frontRightPower *= 0.5;
-         }
-         if (gamepad1.left_bumper) {
-         rearLeftPower *= 0.3;
-         rearRightPower *= 0.3;
-         frontLeftPower *= 0.3;
-         frontRightPower *= 0.3;
-         }
-
-         frontLeftMotor.setPower(frontLeftPower);
-         rearLeftMotor.setPower(rearLeftPower);
-         rearRightMotor.setPower(rearRightPower);
-         frontRightMotor.setPower(frontRightPower);
-         */
 
         ms = .82f;
 
@@ -182,20 +133,29 @@ public class DrivingTheo extends LinearOpMode {
             swp *= .4;
         if(gamepad1.left_bumper)
             swp *= .3;
-        mecanumDrive.setWeightedDrivePower(
-                new Pose2d(
-                        -gamepad1.right_stick_y * swp * ms,
-                        -gamepad1.right_stick_x * swp * ms,
-                        (-gamepad1.right_trigger + gamepad1.left_trigger) * swp * ms
-                )
-        );
 
-        /*
-        if(gamepad1.y)
-            mecanumDrive.followTrajectory(mecanumDrive.trajectoryBuilder(mecanumDrive.getPoseEstimate())
-            .lineTo(new Vector2d(0, 0))
-            .build());
-         */
+        if(!sharedControls) {
+            mecanumDrive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad1.right_stick_y * swp * ms,
+                            -gamepad1.right_stick_x * swp * ms,
+                            (-gamepad1.right_trigger + gamepad1.left_trigger) * swp * ms
+                    )
+            );
+        } else{
+            mecanumDrive.setWeightedDrivePower(
+                    new Pose2d(
+                            gamepad1.right_stick_y * swp * ms,
+                            gamepad1.right_stick_x * swp * ms,
+                            (-gamepad1.right_trigger + gamepad1.left_trigger) * swp * ms
+                    )
+            );
+        }
+
+        if(gamepad1.y){
+            sharedControls = true;
+        } else if(gamepad1.x)
+            sharedControls = false;
 
         mecanumDrive.update();
     }
@@ -210,10 +170,17 @@ public class DrivingTheo extends LinearOpMode {
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setPower(1);
 
-
-        if (runtime.milliseconds() > 800) {
-            moveTargets.remove();
-            runtime.reset();
+        if(!sharedControls) {
+            if (runtime.milliseconds() > 700) {//800
+                moveTargets.remove();
+                runtime.reset();
+            }
+        }
+        else {
+            if (runtime.milliseconds() > 400) {
+                moveTargets.remove();
+                runtime.reset();
+            }
         }
     }
 
@@ -229,66 +196,112 @@ public class DrivingTheo extends LinearOpMode {
     private void controlArm() {
         executeCurrentMoveTarget();
         MoveTarget currentTarget;
-        if (gamepad2.a) {
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 550);
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 15);
-            moveTargets.add(currentTarget);
-        }
-        else if(gamepad2.x) {
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 550); //600
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 1305);
-            moveTargets.add(currentTarget);
-        }
-        else if(gamepad2.b){
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 1225); // 1000
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 1305);
-            moveTargets.add(currentTarget);
-        }
-        else if(gamepad2.y){
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 1825); //1660 -1300
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 1305);
-            moveTargets.add(currentTarget);
-        }
-
-        if (gamepad2.dpad_down) {
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 550);
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, 0);
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(armMotor, 15);
-            moveTargets.add(currentTarget);
-        }
-        else if(gamepad2.dpad_left) {
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 550);
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, -1305);
-            moveTargets.add(currentTarget);
-        }
-        else if(gamepad2.dpad_right){
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 1225);
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, -1305);
-            moveTargets.add(currentTarget);
-        }
-        else if(gamepad2.dpad_up){
-            resetTargets();
-            currentTarget = new MoveTarget(armMotor, 1825);
-            moveTargets.add(currentTarget);
-            currentTarget = new MoveTarget(plateMotor, -1305);
-            moveTargets.add(currentTarget);
+        if(!sharedControls) {
+            if (gamepad2.dpad_down) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 0);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(armMotor, 15);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_left) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_right) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1225);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_up) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1825);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.a) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 0);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(armMotor, 15);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.x) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1305);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.b){
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1225);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1305);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.y){
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1825);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1305);
+                moveTargets.add(currentTarget);
+            }
+        } else{
+            if (gamepad2.dpad_down) {
+                resetTargets();
+                currentTarget = new MoveTarget(plateMotor, 0);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(armMotor, 15);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_left) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 570);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1305);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_right) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1225);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1305);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.dpad_up) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 770);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 1305);
+                moveTargets.add(currentTarget);
+            } else if (gamepad2.a) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, 0);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(armMotor, 15);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.x) {
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 550);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.b){
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1225);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            } else if(gamepad2.y){
+                resetTargets();
+                currentTarget = new MoveTarget(armMotor, 1825);
+                moveTargets.add(currentTarget);
+                currentTarget = new MoveTarget(plateMotor, -1305);
+                moveTargets.add(currentTarget);
+            }
         }
 
         if(gamepad2.right_stick_button){
@@ -334,25 +347,6 @@ public class DrivingTheo extends LinearOpMode {
             armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             plateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-
-        //limiter
-        /*if(!gamepad2.left_stick_button) {
-            if (armMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-                if (armPower > 0 && armPosition <= 10)
-                    armMotor.setPower(0);
-                telemetry.addData("T", "a incercat");
-                telemetry.update();
-            }
-            if (plateMotor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-                if (platePower > 0 && platePosition >= 1000)
-                    plateMotor.setPower(0);
-                else if (platePower < 0 && platePosition <= -1000)
-                    plateMotor.setPower(0);
-                telemetry.addData("T", "a incercat");
-                telemetry.update();
-            }
-        }*/
-
     }
 
     boolean startedDucks = false;

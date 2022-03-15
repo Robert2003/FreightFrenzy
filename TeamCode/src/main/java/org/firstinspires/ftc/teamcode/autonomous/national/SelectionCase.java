@@ -74,17 +74,6 @@ public class SelectionCase {
                     .forward(18)
                     .turn(Math.toRadians(sign * -135))
                     .build();
-            /*
-            strafeToPark = auto.getMecanumDrive()
-                    .trajectoryBuilder(alignWithWall2.end())
-                    .strafeLeft(sign * 40)
-                    .addTemporalMarker(.3,() -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),15))
-                    .build();
-            park = auto.getMecanumDrive()
-                    .trajectoryBuilder(strafeToPark.end())
-                    .lineToLinearHeading(new Pose2d(-20,sign * -50,Math.toRadians(sign * (-180))))
-                    .build();
-             */
         } else if(teamCompatible == TeamCompatible.BAG_UN_CARRY) {
             deliverPreloadBox = auto.getMecanumDrive()
                     .trajectoryBuilder(new Pose2d())
