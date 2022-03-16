@@ -37,7 +37,7 @@ public class FrenzySelection extends LinearOpMode {
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
             runtime.reset();
-            int armGoTo = 1250;
+            int armGoTo = 1200;
             if (frenzyCamera.getValRight() != 0 || forcedCase == ForcedCase.HIGH)
                 armGoTo = 1825;
             else if (frenzyCamera.getValLeft() != 0 || forcedCase == ForcedCase.LOW)
