@@ -58,9 +58,9 @@ public class FrenzyCamera{
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    public static double[] midPos = {4.3/8.0+offsetX, 1.4/8.0+offsetY};//0 = col, 1 = row
-    public static double[] leftPos = {0.7/8.0+offsetX, 1.2/8.0+offsetY}; // era 2
-    public static double[] rightPos = {7.7/8.0+offsetX, 1.6/8.0+offsetY}; // era 6
+    public static double[] leftPos = {0.5/8.0+offsetX, 1.85/8.0+offsetY}; // era 2
+    public static double[] midPos = {4.3/8.0+offsetX, 2.1/8.0+offsetY};//0 = col, 1 = row
+    public static double[] rightPos = {7.8/8.0+offsetX, 2.25/8.0+offsetY}; // era 6
     public static double[] mobilePos = {4.3/8.0+offsetX, 1.0/8.0+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
 
@@ -219,42 +219,6 @@ public class FrenzyCamera{
         }
 
     }
-    /*
-    public static void updatePoint() {
-    }
-
-    public double searchVal (Side side, double rectX, double searchInterval, double distance) {
-        if (side == Side.BLUE) {
-            if (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
-                mobilePos[0] += searchInterval;
-                distance += searchInterval;
-                return searchVal(side, rectX, searchInterval, distance);
-            }
-            else
-            {
-                mobilePos[0] = rectX;
-                return distance;
-            }
-        }
-        else
-        {
-            if (getValMobile() == 0 && mobilePos[0] <= 1 + offsetX) {
-                mobilePos[0] += searchInterval;
-                distance += searchInterval;
-                return searchVal(side, rectX, searchInterval, distance);
-            }
-            else {
-                mobilePos[0] = rectX;
-                return distance;
-            }
-        }
-    }
-    public double searchFreight(Side side, double searchInterval){
-        double rectX = mobilePos[0];
-        double distance = 0;
-        return searchVal(side, rectX, searchInterval, distance);
-    }
-    */
 
     public ElapsedTime getRuntimeElapsed() {
         return runtime;

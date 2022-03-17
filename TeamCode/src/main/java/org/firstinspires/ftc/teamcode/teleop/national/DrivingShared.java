@@ -350,8 +350,9 @@ public class DrivingShared extends LinearOpMode {
     }
 
     boolean startedDucks = false;
-    float initDuckSpeed = .8f;
-    int timeToAccel = 1250, timeToAccelInsta = 700; //millis, era 800 650
+    float initDuckSpeed = .3f;
+    float finalDuckSpeed = .75f;
+    int timeToAccel = 1000, timeToAccelInsta = 1000; //millis, era 800 650
 
     private void controlContinuousServo(){
         if(gamepad2.right_trigger != 0) {
@@ -361,7 +362,7 @@ public class DrivingShared extends LinearOpMode {
             }
             flyWheel.setPower(initDuckSpeed);
             if(runtime.milliseconds() > timeToAccelInsta)
-                flyWheel.setPower(1);
+                flyWheel.setPower(finalDuckSpeed);
             else if(runtime.milliseconds() > timeToAccel)
                 flyWheel.setPower(runtime.milliseconds() * initDuckSpeed / timeToAccel);
         } else if(gamepad2.left_trigger != 0) {
@@ -371,11 +372,11 @@ public class DrivingShared extends LinearOpMode {
             }
             flyWheel.setPower(-initDuckSpeed);
             if(runtime.milliseconds() > timeToAccelInsta)
-                flyWheel.setPower(-1);
+                flyWheel.setPower(-finalDuckSpeed);
             if(runtime.milliseconds() > timeToAccel)
                 flyWheel.setPower(-runtime.milliseconds() * initDuckSpeed / timeToAccel);
         } else {
-            flyWheel.setPower(0);
+            flyWheel.setVelocity(0);
             startedDucks = false;
         }
     }

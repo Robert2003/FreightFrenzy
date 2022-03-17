@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -38,7 +39,7 @@ import java.util.List;
  *YES
  */
 @Autonomous(name= "Camera Adjusting", group="Ajustare Joc")
-//@Disabled//comment out this line before using
+@Disabled//comment out this line before using
 public class CameraAdjusting extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
