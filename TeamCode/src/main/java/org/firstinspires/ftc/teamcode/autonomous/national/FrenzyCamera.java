@@ -60,7 +60,7 @@ public class FrenzyCamera{
 
     public static double[] leftPos = {0.5/8.0+offsetX, 2.35/8.0+offsetY}; // era 2
     public static double[] midPos = {4.15/8.0+offsetX, 2.6/8.0+offsetY};//0 = col, 1 = row
-    public static double[] rightPos = {7.5/8.0+offsetX, 2.65/8.0+offsetY}; // era 6
+    public static double[] rightPos = {7.4/8.0+offsetX, 2.65/8.0+offsetY}; // era 6
     public static double[] mobilePos = {4.3/8.0+offsetX, 1.0/8.0+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
 

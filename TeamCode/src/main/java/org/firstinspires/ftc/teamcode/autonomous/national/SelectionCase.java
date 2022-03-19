@@ -56,11 +56,11 @@ public class SelectionCase {
             exitWarehouse = auto.getMecanumDrive()
                     .trajectoryBuilder(enterWarehouse.end())
                     .back(34)
-                    .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1825))
+                    .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1775))
                     .build();
             goToShippingHub = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse.end())
-                    .lineToLinearHeading(new Pose2d(18,sign * 35, Math.toRadians(sign * (10))))
+                    .lineToLinearHeading(new Pose2d(13,sign * 20, Math.toRadians(sign * (20))))
                     .build();
             alignWithWall2 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub.end())
@@ -93,7 +93,7 @@ public class SelectionCase {
             exitWarehouse = auto.getMecanumDrive()
                     .trajectoryBuilder(enterWarehouse.end())
                     .back(39)
-                    .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1825))
+                    .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1775))
                     .build();
             goToShippingHub = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse.end())
@@ -128,7 +128,7 @@ public class SelectionCase {
                     .build();
             parkingSoft = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall3.end())
-                    .strafeRight(7)
+                    .strafeRight(sign * 7)
                     .forward(23)
                     .strafeLeft(sign * 32)
                     .forward(16)
@@ -155,6 +155,30 @@ public class SelectionCase {
             park = auto.getMecanumDrive()
                     .trajectoryBuilder(alignWithCarousel.end())
                     .lineToLinearHeading(new Pose2d(57, sign * 38, Math.toRadians(sign * (-90))))
+                    .build();
+        } else if(teamCompatible == TeamCompatible.IAU_UN_CARRY){
+            deliverPreloadBox = auto.getMecanumDrive()
+                    .trajectoryBuilder(new Pose2d())
+                    .lineToLinearHeading(new Pose2d( 18, sign * 23, Math.toRadians(sign * (30))))
+                    .build();
+            alignWithWall = auto.getMecanumDrive()
+                    .trajectoryBuilder(deliverPreloadBox.end())
+                    .lineToLinearHeading(new Pose2d(-14,sign * 8, Math.toRadians(sign * (-130))))
+                    .addTemporalMarker(.4226, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1100))
+                    .addTemporalMarker(2, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
+                    .build();
+            enterWarehouse = auto.getMecanumDrive()
+                    .trajectoryBuilder(alignWithWall.end())
+                    .forward(36)
+                    .build();
+            parkingSoft = auto.getMecanumDrive()
+                    .trajectorySequenceBuilder(enterWarehouse.end())
+                    .strafeRight(sign * 7)
+                    .forward(23)
+                    .strafeLeft(sign * 32)
+                    .forward(16)
+                    .turn(Math.toRadians(sign * -140))
+                    .strafeLeft(sign * 10)
                     .build();
         }
 
@@ -199,18 +223,25 @@ public class SelectionCase {
             auto.getMecanumDrive().followTrajectory(alignWithWall3);
             auto.getMecanumDrive().followTrajectorySequence(parkingSoft);
         } else if(teamCompatible == TeamCompatible.NONE) {
+            auto.sleep(2000);
             AutoUtil.armToPosition(auto.getRobot().getArmMotor(), armGoTo);
             //while(auto.getRobot().getArmMotor().isBusy());
             auto.getMecanumDrive().followTrajectory(deliverPreloadBox);
             AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
             auto.getMecanumDrive().followTrajectory(goToCarousel);
-            auto.getMecanumDrive().followTrajectorySequence(alignWithCarousel);
             AutoUtil.armToPosition(auto.getRobot().getArmMotor(), auto.getRobot().getZeroArm());
+            auto.getMecanumDrive().followTrajectorySequence(alignWithCarousel);
             auto.sleep(6000);
             auto.getMecanumDrive().followTrajectory(park);
             AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), 0);
+        } else if(teamCompatible == TeamCompatible.IAU_UN_CARRY){
+            auto.sleep(2000);
+            AutoUtil.armToPosition(auto.getRobot().getArmMotor(), armGoTo);
+            auto.getMecanumDrive().followTrajectory(deliverPreloadBox);
+            AutoUtil.setClawOpen(auto.getRobot().getExcavator(), true);
+            auto.getMecanumDrive().followTrajectory(alignWithWall);
+            auto.getMecanumDrive().followTrajectorySequence(parkingSoft);
         }
-
     }
 
 }

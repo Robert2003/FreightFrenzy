@@ -4,6 +4,7 @@ public enum TeamCompatible {
 
     NONE,
     SOFT_DELTA,
-    BAG_UN_CARRY
+    BAG_UN_CARRY,
+    IAU_UN_CARRY
 
 }
