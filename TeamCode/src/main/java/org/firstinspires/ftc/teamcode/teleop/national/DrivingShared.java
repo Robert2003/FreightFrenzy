@@ -115,6 +115,7 @@ public class DrivingShared extends LinearOpMode {
         telemetry.addData("PlateMode", plateMotor.getMode());
         telemetry.addData("ArmPower", armMotor.getPower());
         telemetry.addData("PlatePower", plateMotor.getPower());
+        telemetry.addData("Flywheel", flyWheel.getCurrentPosition());
         telemetry.update();
     }
 
@@ -350,9 +351,10 @@ public class DrivingShared extends LinearOpMode {
     }
 
     boolean startedDucks = false;
-    float initDuckSpeed = .3f;
-    float finalDuckSpeed = .75f;
-    int timeToAccel = 1000, timeToAccelInsta = 1000; //millis, era 800 650
+    float initDuckSpeed = .8f;
+    float finalDuckSpeed = 1f;
+    int timeToAccel = 1250, timeToAccelInsta = 700; //millis, era 800 650
+
 
     private void controlContinuousServo(){
         if(gamepad2.right_trigger != 0) {

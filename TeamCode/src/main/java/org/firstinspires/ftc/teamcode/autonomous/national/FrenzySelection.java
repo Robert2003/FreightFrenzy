@@ -37,6 +37,7 @@ public class FrenzySelection extends LinearOpMode {
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
             runtime.reset();
+            mecanumDrive.setPoseEstimate(new Pose2d(0, 0)); //sterge daca nu merge
             int armGoTo = 1125;
             if (frenzyCamera.getValRight() != 0 || forcedCase == ForcedCase.HIGH)
                 armGoTo = 1825;
