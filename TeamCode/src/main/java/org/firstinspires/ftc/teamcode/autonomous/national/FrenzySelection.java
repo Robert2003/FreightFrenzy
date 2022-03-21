@@ -38,11 +38,7 @@ public class FrenzySelection extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             runtime.reset();
             mecanumDrive.setPoseEstimate(new Pose2d(0, 0)); //sterge daca nu merge
-            int armGoTo = 1125;
-            if (frenzyCamera.getValRight() != 0 || forcedCase == ForcedCase.HIGH)
-                armGoTo = 1825;
-            else if (frenzyCamera.getValLeft() != 0 || forcedCase == ForcedCase.LOW)
-                    armGoTo = 650;
+            int armGoTo = calculateArmGoTo();
             new SelectionCase(this, armGoTo).runAuto();
             telemetry.addData("Case", armGoTo);
             telemetry.update();
@@ -121,7 +117,18 @@ public class FrenzySelection extends LinearOpMode {
         telemetry.addData("Cycle vertical", "DPAD DOWN");
         telemetry.addData("Cycle horizontal", "DPAD RIGHT");
         telemetry.addData("Confirm", "Y");
+        telemetry.addData("", "------Detection------");
+        telemetry.addData("Case", calculateArmGoTo());
         telemetry.update();
+    }
+
+    private int calculateArmGoTo(){
+        int armGoTo = 1125;
+        if (frenzyCamera.getValRight() != 0 || forcedCase == ForcedCase.HIGH)
+            armGoTo = 1825;
+        else if (frenzyCamera.getValLeft() != 0 || forcedCase == ForcedCase.LOW)
+            armGoTo = 650;
+        return armGoTo;
     }
 
     public SampleMecanumDrive getMecanumDrive() {
