@@ -349,9 +349,9 @@ public class DrivingShared extends LinearOpMode {
     }
 
     boolean startedDucks = false;
-    float initDuckSpeed = .8f;
+    float initDuckSpeed = .68f;
     float finalDuckSpeed = 1.0f;
-    int timeToAccel = 1250, timeToAccelInsta = 700; //millis, era 800 650
+    int timeToAccel = 1250, timeToAccelInsta = 850; //millis, era 800 650
 
 
     private void controlContinuousServo(){
