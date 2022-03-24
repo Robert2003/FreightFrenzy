@@ -25,7 +25,8 @@ public class DrivingShared extends LinearOpMode {
     //DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
     Servo excavator;
 
-    double servoPos = 0;
+    double defServoPos = 0f;
+    double servoPos = defServoPos;
 
     SampleMecanumDrive mecanumDrive;
 
@@ -95,9 +96,9 @@ public class DrivingShared extends LinearOpMode {
 
     private void controlClaw() {
         if (gamepad1.dpad_left)
-            servoPos = 0.15;
+            servoPos = 0.15f; //era 0.15 fara gheara noua
         else if (gamepad1.dpad_right)
-            servoPos = 0;
+            servoPos = defServoPos;
         excavator.setPosition(servoPos);
     }
 
@@ -116,12 +117,11 @@ public class DrivingShared extends LinearOpMode {
         telemetry.addData("ArmPower", armMotor.getPower());
         telemetry.addData("PlatePower", plateMotor.getPower());
         telemetry.addData("Flywheel", flyWheel.getCurrentPosition());
+        telemetry.addData("Servo Pos", excavator.getPosition());
         telemetry.update();
     }
 
     double swp, ms; //suppressed wheel power
-
-    long lastSwitchTimeSec = 0;
 
     private void controlDriving() {
 
