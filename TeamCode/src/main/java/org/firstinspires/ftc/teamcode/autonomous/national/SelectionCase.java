@@ -108,7 +108,7 @@ public class SelectionCase {
             enterWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall2.end())
                     .forward(19)
-                    .turn(Math.toRadians(sign * (12)))
+                    .turn(Math.toRadians(sign * (5)))
                     .forward(27)
                     .build();
             exitWarehouse2 = auto.getMecanumDrive()
@@ -119,7 +119,7 @@ public class SelectionCase {
                     .build();
             goToShippingHub2 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse2.end())
-                    .lineToLinearHeading(new Pose2d(3,sign * 20, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(3,sign * 32, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall3 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub2.end())
@@ -141,7 +141,7 @@ public class SelectionCase {
                     .build();
             goToShippingHub3 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse3.end())
-                    .lineToLinearHeading(new Pose2d(-5,sign * 20, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(-5,sign * 32, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall4 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub3.end())
@@ -152,7 +152,7 @@ public class SelectionCase {
             parkingSoft = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall4.end())
                     .strafeRight(sign * 4)
-                    .forward(35)
+                    .forward(39)
                     .strafeLeft(sign * 30)
                     .build();
         } else if(teamCompatible == TeamCompatible.NONE) {

@@ -125,7 +125,7 @@ public class DrivingShared extends LinearOpMode {
 
     private void controlDriving() {
 
-        ms = .82f;
+        ms = .7f;
 
         if(gamepad1.dpad_up)
             ms = 1;
