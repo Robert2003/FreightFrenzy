@@ -25,8 +25,7 @@ public class DrivingShared extends LinearOpMode {
     //DcMotorEx rearLeftMotor, frontLeftMotor, rearRightMotor, frontRightMotor;
     Servo excavator;
 
-    double defServoPos = 0f;
-    double servoPos = defServoPos;
+    double servoPos;
 
     SampleMecanumDrive mecanumDrive;
 
@@ -84,6 +83,8 @@ public class DrivingShared extends LinearOpMode {
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
         mecanumDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mecanumDrive.setZeroPowerBehavior(BRAKE);
+
+        servoPos = robot.getExcavatorOpen();
     }
 
     private void run() {
@@ -95,10 +96,11 @@ public class DrivingShared extends LinearOpMode {
     }
 
     private void controlClaw() {
+        //gheara default 0.15f, deschis 0
         if (gamepad1.dpad_left)
-            servoPos = 0.15f; //era 0.15 fara gheara noua
-        else if (gamepad1.dpad_right)
-            servoPos = defServoPos;
+            servoPos = robot.getExcavatorOpen();
+        else if (gamepad1.dpad_right) //pozitie inchis
+            servoPos = robot.getExcavatorClosed();
         excavator.setPosition(servoPos);
     }
 

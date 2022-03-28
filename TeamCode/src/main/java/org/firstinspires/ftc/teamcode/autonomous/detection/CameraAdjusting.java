@@ -115,7 +115,7 @@ public class CameraAdjusting extends LinearOpMode {
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         robot = new RobotDefinition(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
-        AutoUtil.setClawOpen(robot.getExcavator(), true);
+        AutoUtil.setClawOpen(robot, robot.getExcavator(), true);
     }
 
     //detection pipeline

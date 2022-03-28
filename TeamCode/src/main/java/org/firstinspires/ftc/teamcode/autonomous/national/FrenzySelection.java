@@ -50,7 +50,7 @@ public class FrenzySelection extends LinearOpMode {
         robot = new RobotDefinition(hardwareMap);
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
-        AutoUtil.setClawOpen(robot.getExcavator(), false);
+        AutoUtil.setClawOpen(robot, robot.getExcavator(), false);
         frenzyCamera = new FrenzyCamera();
     }
 
