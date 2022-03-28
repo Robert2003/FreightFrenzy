@@ -152,7 +152,7 @@ public class SelectionCase {
             parkingSoft = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall4.end())
                     .strafeRight(sign * 4)
-                    .forward(28)
+                    .forward(36)
                     .strafeLeft(sign * 30)
                     .build();
         } else if(teamCompatible == TeamCompatible.NONE) {

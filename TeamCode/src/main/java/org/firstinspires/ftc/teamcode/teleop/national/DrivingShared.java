@@ -268,7 +268,7 @@ public class DrivingShared extends LinearOpMode {
                 moveTargets.add(currentTarget);
             } else if (gamepad2.dpad_right) {
                 resetTargets();
-                currentTarget = new MoveTarget(armMotor, 1225);
+                currentTarget = new MoveTarget(armMotor, 1000);
                 moveTargets.add(currentTarget);
                 currentTarget = new MoveTarget(plateMotor, 1305);
                 moveTargets.add(currentTarget);
@@ -292,7 +292,7 @@ public class DrivingShared extends LinearOpMode {
                 moveTargets.add(currentTarget);
             } else if(gamepad2.b){
                 resetTargets();
-                currentTarget = new MoveTarget(armMotor, 1225);
+                currentTarget = new MoveTarget(armMotor, 1000);
                 moveTargets.add(currentTarget);
                 currentTarget = new MoveTarget(plateMotor, -1305);
                 moveTargets.add(currentTarget);

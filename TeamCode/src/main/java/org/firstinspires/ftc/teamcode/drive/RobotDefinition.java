@@ -14,7 +14,7 @@ public class RobotDefinition {
 
     int zeroArm = 15;
 
-    float excavatorOpen = .47f, excavatorClosed = .57f;
+    float excavatorOpen = .47f, excavatorClosed = .63f;
 
     public RobotDefinition(HardwareMap hardwareMap){
         plateMotor = hardwareMap.get(DcMotorEx.class, "plateMotor");
