@@ -82,7 +82,7 @@ public class SelectionCase {
                     .build();
             alignWithWall = auto.getMecanumDrive()
                     .trajectoryBuilder(deliverPreloadBox.end())
-                    .lineToLinearHeading(new Pose2d(-3,sign * -2, Math.toRadians(sign * (-90))))
+                    .lineToLinearHeading(new Pose2d(-2,sign * -2, Math.toRadians(sign * (-90))))
                     .addTemporalMarker(.37, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1100))
                     .addTemporalMarker(1.8, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .build();
@@ -101,7 +101,7 @@ public class SelectionCase {
                     .build();
             alignWithWall2 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub.end())
-                    .lineToLinearHeading(new Pose2d(-5,sign * 10, Math.toRadians(sign * (-90))))
+                    .lineToLinearHeading(new Pose2d(-4,sign * 10, Math.toRadians(sign * (-90))))
                     .addTemporalMarker(.6, () -> AutoUtil.plateToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .addTemporalMarker(.5, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(),0))
                     .build();
@@ -114,38 +114,38 @@ public class SelectionCase {
             exitWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(enterWarehouse2.end())
                     .back(46)
-                    .strafeRight(sign * 8)
+                    //.strafeRight(sign * 8)
                     .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1825))
                     .build();
             goToShippingHub2 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse2.end())
-                    .lineToLinearHeading(new Pose2d(3,sign * 20, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(11,sign * 18, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall3 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub2.end())
-                    .lineToLinearHeading(new Pose2d(-16,sign * 4,Math.toRadians(sign * (-90))))
+                    .lineToLinearHeading(new Pose2d(-15,sign * 4,Math.toRadians(sign * (-90))))
                     .addTemporalMarker(.6, () -> AutoUtil.plateToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .addTemporalMarker(.5, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(),0))
                     .build();
             enterWarehouse3 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall3.end())
                     .forward(23)
-                    .turn(Math.toRadians(sign * (0)))
-                    .forward(27)
+                    .turn(Math.toRadians(sign * (5)))
+                    .forward(26)
                     .build();
             exitWarehouse3 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(enterWarehouse3.end())
-                    .back(46)
-                    .strafeRight(sign * 8)
+                    .back(47)
+                    //.strafeRight(sign * 8)
                     .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1825))
                     .build();
             goToShippingHub3 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse3.end())
-                    .lineToLinearHeading(new Pose2d(-5,sign * 20, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(2,sign * 13, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall4 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub3.end())
-                    .lineToLinearHeading(new Pose2d(-23,sign * 4,Math.toRadians(sign * (-90))))
+                    .lineToLinearHeading(new Pose2d(-19,sign * 4,Math.toRadians(sign * (-90))))
                     .addTemporalMarker(.6, () -> AutoUtil.plateToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .addTemporalMarker(.5, () -> AutoUtil.plateToPosition(auto.getRobot().getPlateMotor(),0))
                     .build();
@@ -175,7 +175,7 @@ public class SelectionCase {
                     .build();
             park = auto.getMecanumDrive()
                     .trajectoryBuilder(alignWithCarousel.end())
-                    .lineToLinearHeading(new Pose2d(25, sign * 23, Math.toRadians(sign * (-90))))
+                    .lineToLinearHeading(new Pose2d(28, sign * 24, Math.toRadians(sign * (-90))))
                     .build();
         } else if(teamCompatible == TeamCompatible.IAU_UN_CARRY){
             deliverPreloadBox = auto.getMecanumDrive()
@@ -233,18 +233,21 @@ public class SelectionCase {
             auto.getMecanumDrive().followTrajectory(exitWarehouse);
             auto.getMecanumDrive().followTrajectory(goToShippingHub);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), true);
+            auto.sleep(500);
             auto.getMecanumDrive().followTrajectory(alignWithWall2);
             auto.getMecanumDrive().followTrajectorySequence(enterWarehouse2);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), false);
             auto.getMecanumDrive().followTrajectorySequence(exitWarehouse2);
             auto.getMecanumDrive().followTrajectory(goToShippingHub2);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), true);
+            auto.sleep(500);
             auto.getMecanumDrive().followTrajectory(alignWithWall3);
             auto.getMecanumDrive().followTrajectorySequence(enterWarehouse3);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), false);
             auto.getMecanumDrive().followTrajectorySequence(exitWarehouse3);
             auto.getMecanumDrive().followTrajectory(goToShippingHub3);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), true);
+            auto.sleep(500);
             auto.getMecanumDrive().followTrajectory(alignWithWall4);
             auto.getMecanumDrive().followTrajectorySequence(parkingSoft);
         } else if(teamCompatible == TeamCompatible.NONE) {
