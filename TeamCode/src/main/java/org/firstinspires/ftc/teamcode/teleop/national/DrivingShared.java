@@ -180,7 +180,7 @@ public class DrivingShared extends LinearOpMode {
             }
         }
         else {
-            if (runtime.milliseconds() > 400) {
+            if (runtime.milliseconds() > 500) {
                 moveTargets.remove();
                 runtime.reset();
             }
@@ -202,8 +202,10 @@ public class DrivingShared extends LinearOpMode {
         if(!sharedControls) {
             if (gamepad2.dpad_down) {
                 resetTargets();
-                currentTarget = new MoveTarget(armMotor, 500);
-                moveTargets.add(currentTarget);
+                if(armMotor.getCurrentPosition() > 500) {
+                    currentTarget = new MoveTarget(armMotor, 500);
+                    moveTargets.add(currentTarget);
+                }
                 currentTarget = new MoveTarget(plateMotor, 0);
                 moveTargets.add(currentTarget);
                 currentTarget = new MoveTarget(armMotor, robot.getZeroArm());
@@ -228,8 +230,10 @@ public class DrivingShared extends LinearOpMode {
                 moveTargets.add(currentTarget);
             } else if (gamepad2.a) {
                 resetTargets();
-                currentTarget = new MoveTarget(armMotor, 500);
-                moveTargets.add(currentTarget);
+                if(armMotor.getCurrentPosition() > 500) {
+                    currentTarget = new MoveTarget(armMotor, 500);
+                    moveTargets.add(currentTarget);
+                }
                 currentTarget = new MoveTarget(plateMotor, 0);
                 moveTargets.add(currentTarget);
                 currentTarget = new MoveTarget(armMotor, robot.getZeroArm());
@@ -319,6 +323,20 @@ public class DrivingShared extends LinearOpMode {
             currentTarget = new MoveTarget(plateMotor, 0);
             moveTargets.add(currentTarget);
         }
+        if(gamepad2.right_trigger != 0 && sharedControls){
+            resetTargets();
+            currentTarget = new MoveTarget(armMotor, 620);
+            moveTargets.add(currentTarget);
+            currentTarget = new MoveTarget(plateMotor, -1920);
+            moveTargets.add(currentTarget);
+        }
+        if(gamepad2.left_trigger != 0 && sharedControls){
+            resetTargets();
+            currentTarget = new MoveTarget(armMotor, 620);
+            moveTargets.add(currentTarget);
+            currentTarget = new MoveTarget(plateMotor, 1920);
+            moveTargets.add(currentTarget);
+        }
 
         armSuppress = gamepad2.right_bumper;
 
@@ -357,7 +375,7 @@ public class DrivingShared extends LinearOpMode {
 
 
     private void controlContinuousServo(){
-        if(gamepad2.right_trigger != 0) {
+        if(gamepad2.right_trigger != 0 && !sharedControls) {
             if(!startedDucks){
                 runtime.reset();
                 startedDucks = true;
@@ -367,7 +385,7 @@ public class DrivingShared extends LinearOpMode {
                 flyWheel.setPower(finalDuckSpeed);
             else if(runtime.milliseconds() > timeToAccel)
                 flyWheel.setPower(runtime.milliseconds() * initDuckSpeed / timeToAccel);
-        } else if(gamepad2.left_trigger != 0) {
+        } else if(gamepad2.left_trigger != 0 && !sharedControls) {
             if(!startedDucks){
                 runtime.reset();
                 startedDucks = true;
