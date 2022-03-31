@@ -119,7 +119,7 @@ public class SelectionCase {
                     .build();
             goToShippingHub2 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse2.end())
-                    .lineToLinearHeading(new Pose2d(11,sign * 18, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(11,sign * 20, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall3 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub2.end())
@@ -141,7 +141,7 @@ public class SelectionCase {
                     .build();
             goToShippingHub3 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse3.end())
-                    .lineToLinearHeading(new Pose2d(2,sign * 13, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(2,sign * 16, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall4 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub3.end())
