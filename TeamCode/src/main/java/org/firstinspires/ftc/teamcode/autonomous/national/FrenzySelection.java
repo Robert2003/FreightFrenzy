@@ -125,7 +125,7 @@ public class FrenzySelection extends LinearOpMode {
     private int calculateArmGoTo(){
         int armGoTo = 1125;
         if (frenzyCamera.getValRight() != 0 || forcedCase == ForcedCase.HIGH)
-            armGoTo = 1825;
+            armGoTo = 1775;
         else if (frenzyCamera.getValLeft() != 0 || forcedCase == ForcedCase.LOW)
             armGoTo = 650;
         return armGoTo;

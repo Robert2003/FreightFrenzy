@@ -152,7 +152,7 @@ public class SelectionCase {
             parkingSoft = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall4.end())
                     .strafeRight(sign * 4)
-                    .forward(36)
+                    .forward(38)
                     .strafeLeft(sign * 30)
                     .build();
         } else if(teamCompatible == TeamCompatible.NONE) {
@@ -167,7 +167,7 @@ public class SelectionCase {
                     .build();
             alignWithCarousel = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(goToCarousel.end())
-                    .back(4,
+                    .back(7,
                             SampleMecanumDrive.getVelocityConstraint(8, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
@@ -262,7 +262,7 @@ public class SelectionCase {
             auto.getMecanumDrive().followTrajectory(park);
             AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), 0);
         } else if(teamCompatible == TeamCompatible.IAU_UN_CARRY){
-            auto.sleep(2000);
+            auto.sleep(3000);
             AutoUtil.armToPosition(auto.getRobot().getArmMotor(), armGoTo);
             auto.getMecanumDrive().followTrajectory(deliverPreloadBox);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), true);
