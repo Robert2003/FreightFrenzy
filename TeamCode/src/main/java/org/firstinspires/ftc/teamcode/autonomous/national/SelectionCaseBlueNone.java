@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class SelectionCase {
+public class SelectionCaseBlueNone {
 
-    FrenzySelection auto;
+    CameraAdjustingSyncedBlueNone auto;
     Side side;
     ForcedCase forcedCase;
     TeamCompatible teamCompatible;
@@ -25,12 +25,12 @@ public class SelectionCase {
     int armGoTo;
     int sign;
 
-    public SelectionCase(FrenzySelection auto, int armGoTo) {
+    public SelectionCaseBlueNone(CameraAdjustingSyncedBlueNone auto, int armGoTo) {
         this.auto = auto;
         this.armGoTo = armGoTo;
-        this.side = auto.getSide();
-        this.forcedCase = auto.getForcedCase();
-        this.teamCompatible = auto.getTeamCompatible();
+        this.side = Side.BLUE;
+        this.forcedCase = ForcedCase.DETECTION;
+        this.teamCompatible = TeamCompatible.NONE;
 
         initializeTrajectories();
     }
@@ -170,7 +170,7 @@ public class SelectionCase {
                     .back(7,
                             SampleMecanumDrive.getVelocityConstraint(8, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                    .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
+                    .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.55f * sign))
                     .strafeRight(sign * 2.78)
                     .build();
             park = auto.getMecanumDrive()

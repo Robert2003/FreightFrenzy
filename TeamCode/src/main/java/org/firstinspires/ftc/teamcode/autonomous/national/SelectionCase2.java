@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class SelectionCase {
+public class SelectionCase2 {
 
-    FrenzySelection auto;
+    FrenzySelection2 auto;
     Side side;
     ForcedCase forcedCase;
     TeamCompatible teamCompatible;
@@ -25,7 +25,7 @@ public class SelectionCase {
     int armGoTo;
     int sign;
 
-    public SelectionCase(FrenzySelection auto, int armGoTo) {
+    public SelectionCase2(FrenzySelection2 auto, int armGoTo) {
         this.auto = auto;
         this.armGoTo = armGoTo;
         this.side = auto.getSide();

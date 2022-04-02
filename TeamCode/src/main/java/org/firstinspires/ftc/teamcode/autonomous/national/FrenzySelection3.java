@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.national;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,10 +12,9 @@ import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
 import org.firstinspires.ftc.teamcode.autonomous.national.option.TeamCompatible;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name= "Frenzy Selection")
-public class FrenzySelection extends LinearOpMode {
+@Autonomous(name= "Frenzy Selection f bun")
+public class FrenzySelection3 extends LinearOpMode {
 
     ElapsedTime runtime = new ElapsedTime();
 
@@ -35,19 +32,24 @@ public class FrenzySelection extends LinearOpMode {
         initialize();
         selectOptions();
         waitForStart();
-        while (opModeIsActive() && !isStopRequested()) {
+        if (opModeIsActive() && !isStopRequested()) {
             runtime.reset();
             mecanumDrive.setPoseEstimate(new Pose2d(0, 0)); //sterge daca nu merge
-            int armGoTo = calculateArmGoTo();
+            frenzyCamera = new FrenzyCamera();
+            int armGoTo = 1125;
+            if (frenzyCamera.valRight != 0)
+                armGoTo = 1775;
+            else if (frenzyCamera.valLeft != 0)
+                armGoTo = 650;
             sleep(1500);
-            new SelectionCase(this, armGoTo).runAuto();
+            new SelectionCase3(this, armGoTo).runAuto();
             telemetry.addData("Case", armGoTo);
             telemetry.update();
             sleep(30000);
         }
     }
 
-    public void initialize(){
+    private void initialize(){
         robot = new RobotDefinition(hardwareMap);
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         mecanumDrive.setPoseEstimate(new Pose2d(0, 0));
@@ -110,6 +112,8 @@ public class FrenzySelection extends LinearOpMode {
     }
 
     private void showcaseOptions(){
+        telemetry.addData("", "------Detection------");
+        telemetry.addData("Case", calculateArmGoTo());
         telemetry.addData("", "------Options------");
         telemetry.addData("Side", side.toString() + (cursorOption == 1 ? " <-" : ""));
         telemetry.addData("Forced Case", forcedCase.toString() + (cursorOption == 2 ? " <-" : ""));
@@ -118,12 +122,11 @@ public class FrenzySelection extends LinearOpMode {
         telemetry.addData("Cycle vertical", "DPAD DOWN");
         telemetry.addData("Cycle horizontal", "DPAD RIGHT");
         telemetry.addData("Confirm", "Y");
-        telemetry.addData("", "------Detection------");
-        telemetry.addData("Case", calculateArmGoTo());
         telemetry.update();
     }
 
     private int calculateArmGoTo(){
+        frenzyCamera = new FrenzyCamera();
         int armGoTo = 1125;
         if (frenzyCamera.valRight != 0)
             armGoTo = 1775;
