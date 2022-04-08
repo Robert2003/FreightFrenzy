@@ -12,9 +12,23 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class SelectionCaseRedBag {
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
 
-    CameraAdjustingSyncedRedBag auto;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import java.util.Locale;
+
+public class SelectionCaseClawDetection {
+
+    CameraAdjustingSyncedClawDetection auto;
     Side side;
     ForcedCase forcedCase;
     TeamCompatible teamCompatible;
@@ -25,10 +39,10 @@ public class SelectionCaseRedBag {
     int armGoTo;
     int sign;
 
-    public SelectionCaseRedBag(CameraAdjustingSyncedRedBag auto, int armGoTo) {
+    public SelectionCaseClawDetection(CameraAdjustingSyncedClawDetection auto, int armGoTo) {
         this.auto = auto;
         this.armGoTo = armGoTo;
-        this.side = Side.RED;
+        this.side = Side.BLUE;
         this.forcedCase = ForcedCase.DETECTION;
         this.teamCompatible = TeamCompatible.BAG_UN_CARRY;
 
@@ -107,13 +121,13 @@ public class SelectionCaseRedBag {
                     .build();
             enterWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall2.end())
-                    .forward(19)
+                    .forward(21)
                     .turn(Math.toRadians(sign * (10)))
                     .forward(29)
                     .build();
             exitWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(enterWarehouse2.end())
-                    .back(48)
+                    .back(46)
                     //.strafeRight(sign * 8)
                     .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1825))
                     .build();

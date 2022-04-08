@@ -77,7 +77,7 @@ public class CameraAdjustingSyncedRedNone extends LinearOpMode {
                 armGoTo = 650;
             new SelectionCaseRedNone(this, armGoTo).runAuto();
             telemetry.update();
-            sleep(10000);
+            sleep(30000);
 
         }
 

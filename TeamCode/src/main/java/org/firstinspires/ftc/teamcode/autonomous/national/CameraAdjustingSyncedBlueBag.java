@@ -77,7 +77,7 @@ public class CameraAdjustingSyncedBlueBag extends LinearOpMode {
                 armGoTo = 650;
             new SelectionCaseBlueBag(this, armGoTo).runAuto();
             telemetry.update();
-            sleep(10000);
+            sleep(30000);
 
         }
 

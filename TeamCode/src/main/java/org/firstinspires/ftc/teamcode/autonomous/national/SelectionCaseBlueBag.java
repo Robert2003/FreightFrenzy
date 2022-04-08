@@ -107,9 +107,9 @@ public class SelectionCaseBlueBag {
                     .build();
             enterWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall2.end())
-                    .forward(19)
+                    .forward(21)
                     .turn(Math.toRadians(sign * (10)))
-                    .forward(27)
+                    .forward(29)
                     .build();
             exitWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(enterWarehouse2.end())

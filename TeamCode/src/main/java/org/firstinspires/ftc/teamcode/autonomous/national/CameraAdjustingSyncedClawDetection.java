@@ -27,9 +27,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
  * monitor: 640 x 480
  * YES
  */
-@Autonomous(name = "Camera Adjusting Synced Blue None", group = "Ajustare Joc")
+@Autonomous(name = "Camera Adjusting Synced Claw Detection", group = "Ajustare Joc")
 //@Disabled//comment out this line before using
-public class CameraAdjustingSyncedBlueNone extends LinearOpMode {
+public class CameraAdjustingSyncedClawDetection extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -75,9 +75,9 @@ public class CameraAdjustingSyncedBlueNone extends LinearOpMode {
                 armGoTo = 1775;
             else if (frenzyCamera.getValLeft() != 0)
                 armGoTo = 650;
-            new SelectionCaseBlueNone(this, armGoTo).runAuto();
+            new SelectionCaseClawDetection(this, armGoTo).runAuto();
             telemetry.update();
-            sleep(30000);
+            sleep(10000);
 
         }
 

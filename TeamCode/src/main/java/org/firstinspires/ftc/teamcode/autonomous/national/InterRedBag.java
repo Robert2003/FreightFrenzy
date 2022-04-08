@@ -9,6 +9,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
+import org.firstinspires.ftc.teamcode.autonomous.national.FrenzyCamera;
+import org.firstinspires.ftc.teamcode.autonomous.national.SelectionCaseZiua;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
+import org.firstinspires.ftc.teamcode.autonomous.national.option.TeamCompatible;
 import org.firstinspires.ftc.teamcode.drive.RobotDefinition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -27,9 +31,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
  * monitor: 640 x 480
  * YES
  */
-@Autonomous(name = "Camera Adjusting Synced Blue None", group = "Ajustare Joc")
+@Autonomous(name = "Inter Red Bag", group = "Ajustare Joc")
 //@Disabled//comment out this line before using
-public class CameraAdjustingSyncedBlueNone extends LinearOpMode {
+public class InterRedBag extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -75,9 +79,10 @@ public class CameraAdjustingSyncedBlueNone extends LinearOpMode {
                 armGoTo = 1775;
             else if (frenzyCamera.getValLeft() != 0)
                 armGoTo = 650;
-            new SelectionCaseBlueNone(this, armGoTo).runAuto();
+            new SelectionCaseInter(this, mecanumDrive, robot,
+                    Side.RED, TeamCompatible.BAG_UN_CARRY, armGoTo).runAuto();
             telemetry.update();
-            sleep(30000);
+            sleep(10000);
 
         }
 
