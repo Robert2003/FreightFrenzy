@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.national.option;
+package org.firstinspires.ftc.teamcode.autonomous.national.inter.option;
 
 public enum TeamCompatible {
 

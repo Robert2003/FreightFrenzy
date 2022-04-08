@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.national;
+package org.firstinspires.ftc.teamcode.autonomous.national.inter;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -27,9 +27,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
  * monitor: 640 x 480
  * YES
  */
-@Autonomous(name = "Camera Adjusting Synced Claw Detection", group = "Ajustare Joc")
+@Autonomous(name = "Camera Adjusting Synced Blue None", group = "Ajustare Joc")
 //@Disabled//comment out this line before using
-public class CameraAdjustingSyncedClawDetection extends LinearOpMode {
+public class CameraAdjustingSyncedBlueNone extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -75,9 +75,9 @@ public class CameraAdjustingSyncedClawDetection extends LinearOpMode {
                 armGoTo = 1775;
             else if (frenzyCamera.getValLeft() != 0)
                 armGoTo = 650;
-            new SelectionCaseClawDetection(this, armGoTo).runAuto();
+            new SelectionCaseBlueNone(this, armGoTo).runAuto();
             telemetry.update();
-            sleep(10000);
+            sleep(30000);
 
         }
 

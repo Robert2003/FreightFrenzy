@@ -1,20 +1,20 @@
-package org.firstinspires.ftc.teamcode.autonomous.national;
+package org.firstinspires.ftc.teamcode.autonomous.national.inter;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.national.option.ForcedCase;
-import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
-import org.firstinspires.ftc.teamcode.autonomous.national.option.TeamCompatible;
+import org.firstinspires.ftc.teamcode.autonomous.national.inter.option.ForcedCase;
+import org.firstinspires.ftc.teamcode.autonomous.national.inter.option.Side;
+import org.firstinspires.ftc.teamcode.autonomous.national.inter.option.TeamCompatible;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class SelectionCaseRedNone {
+public class SelectionCaseBlueNone {
 
-    CameraAdjustingSyncedRedNone auto;
+    CameraAdjustingSyncedBlueNone auto;
     Side side;
     ForcedCase forcedCase;
     TeamCompatible teamCompatible;
@@ -25,10 +25,10 @@ public class SelectionCaseRedNone {
     int armGoTo;
     int sign;
 
-    public SelectionCaseRedNone(CameraAdjustingSyncedRedNone auto, int armGoTo) {
+    public SelectionCaseBlueNone(CameraAdjustingSyncedBlueNone auto, int armGoTo) {
         this.auto = auto;
         this.armGoTo = armGoTo;
-        this.side = Side.RED;
+        this.side = Side.BLUE;
         this.forcedCase = ForcedCase.DETECTION;
         this.teamCompatible = TeamCompatible.NONE;
 

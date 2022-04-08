@@ -1,20 +1,20 @@
-package org.firstinspires.ftc.teamcode.autonomous.national;
+package org.firstinspires.ftc.teamcode.autonomous.national.inter;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutoUtil;
-import org.firstinspires.ftc.teamcode.autonomous.national.option.ForcedCase;
-import org.firstinspires.ftc.teamcode.autonomous.national.option.Side;
-import org.firstinspires.ftc.teamcode.autonomous.national.option.TeamCompatible;
+import org.firstinspires.ftc.teamcode.autonomous.national.inter.option.ForcedCase;
+import org.firstinspires.ftc.teamcode.autonomous.national.inter.option.Side;
+import org.firstinspires.ftc.teamcode.autonomous.national.inter.option.TeamCompatible;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class SelectionCaseRedBag {
+public class SelectionCaseRedNone {
 
-    CameraAdjustingSyncedRedBag auto;
+    CameraAdjustingSyncedRedNone auto;
     Side side;
     ForcedCase forcedCase;
     TeamCompatible teamCompatible;
@@ -25,12 +25,12 @@ public class SelectionCaseRedBag {
     int armGoTo;
     int sign;
 
-    public SelectionCaseRedBag(CameraAdjustingSyncedRedBag auto, int armGoTo) {
+    public SelectionCaseRedNone(CameraAdjustingSyncedRedNone auto, int armGoTo) {
         this.auto = auto;
         this.armGoTo = armGoTo;
         this.side = Side.RED;
         this.forcedCase = ForcedCase.DETECTION;
-        this.teamCompatible = TeamCompatible.BAG_UN_CARRY;
+        this.teamCompatible = TeamCompatible.NONE;
 
         initializeTrajectories();
     }
@@ -109,11 +109,11 @@ public class SelectionCaseRedBag {
                     .trajectorySequenceBuilder(alignWithWall2.end())
                     .forward(19)
                     .turn(Math.toRadians(sign * (10)))
-                    .forward(29)
+                    .forward(27)
                     .build();
             exitWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(enterWarehouse2.end())
-                    .back(48)
+                    .back(46)
                     //.strafeRight(sign * 8)
                     .addTemporalMarker(.3, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1825))
                     .build();
@@ -170,7 +170,7 @@ public class SelectionCaseRedBag {
                     .back(7,
                             SampleMecanumDrive.getVelocityConstraint(8, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                    .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.65f * sign))
+                    .addTemporalMarker(.3, () -> AutoUtil.rotateDucks(auto.getRobot().getFlyWheel(), -.55f * sign))
                     .strafeRight(sign * 2.78)
                     .build();
             park = auto.getMecanumDrive()
