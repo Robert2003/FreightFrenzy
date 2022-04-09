@@ -64,8 +64,8 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 120; // la regionala 58 cu 55
-    public static double MAX_ACCEL = 120; //
+    public static double MAX_VEL = 150; // la regionala 58 cu 55
+    public static double MAX_ACCEL = 150; //
     public static double MAX_ANG_VEL = Math.toRadians(150);
     public static double MAX_ANG_ACCEL = Math.toRadians(150);
 
