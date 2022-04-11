@@ -19,8 +19,8 @@ public class SelectionCaseRedBag {
     ForcedCase forcedCase;
     TeamCompatible teamCompatible;
 
-    Trajectory alignWithWall3, goToShippingHub2, deliverPreloadBox,goToCarousel,storageUnitPark,alignWithWall,enterWarehouse,exitWarehouse,goToShippingHub,alignWithWall2,strafeToPark,park,goToShippingHub3,alignWithWall4;
-    TrajectorySequence parkingSoft,goToPark,exitWarehouse2, enterWarehouse3,goToWare,getCube,collectDuck,alignWithCarousel,deliverDuck,enterWarehouse2,exitWarehouse3;
+    Trajectory alignWithWall3, goToShippingHub2, deliverPreloadBox,goToCarousel,storageUnitPark,alignWithWall,exitWarehouse,goToShippingHub,alignWithWall2,strafeToPark,park,goToShippingHub3,alignWithWall4;
+    TrajectorySequence parkingSoft,goToPark,exitWarehouse2, enterWarehouse3,goToWare,getCube,collectDuck,alignWithCarousel,enterWarehouse,deliverDuck,enterWarehouse2,exitWarehouse3;
 
     int armGoTo;
     int sign;
@@ -50,8 +50,11 @@ public class SelectionCaseRedBag {
                     .addTemporalMarker(2, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .build();
             enterWarehouse = auto.getMecanumDrive()
-                    .trajectoryBuilder(alignWithWall.end())
-                    .forward(31)
+                    .trajectorySequenceBuilder(alignWithWall.end())
+                    .forward(27)
+                    .forward(4,
+                            SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .build();
             exitWarehouse = auto.getMecanumDrive()
                     .trajectoryBuilder(enterWarehouse.end())
@@ -87,8 +90,11 @@ public class SelectionCaseRedBag {
                     .addTemporalMarker(1.8, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .build();
             enterWarehouse = auto.getMecanumDrive()
-                    .trajectoryBuilder(alignWithWall.end())
-                    .forward(34)
+                    .trajectorySequenceBuilder(alignWithWall.end())
+                    .forward(22)
+                    .forward(12,
+                            SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .build();
             exitWarehouse = auto.getMecanumDrive()
                     .trajectoryBuilder(enterWarehouse.end())
@@ -109,7 +115,10 @@ public class SelectionCaseRedBag {
                     .trajectorySequenceBuilder(alignWithWall2.end())
                     .forward(19)
                     .turn(Math.toRadians(sign * (10)))
-                    .forward(27)
+                    .forward(20)
+                    .forward(7,
+                            SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .build();
             exitWarehouse2 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(enterWarehouse2.end())
@@ -119,7 +128,7 @@ public class SelectionCaseRedBag {
                     .build();
             goToShippingHub2 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse2.end())
-                    .lineToLinearHeading(new Pose2d(12,sign * 20, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(12,sign * 18, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall3 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub2.end())
@@ -131,7 +140,10 @@ public class SelectionCaseRedBag {
                     .trajectorySequenceBuilder(alignWithWall3.end())
                     .forward(23)
                     .turn(Math.toRadians(sign * (5)))
-                    .forward(26)
+                    .forward(20)
+                    .forward(6,
+                            SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .build();
             exitWarehouse3 = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(enterWarehouse3.end())
@@ -141,7 +153,7 @@ public class SelectionCaseRedBag {
                     .build();
             goToShippingHub3 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse3.end())
-                    .lineToLinearHeading(new Pose2d(3,sign * 16, Math.toRadians(sign * (5)))) // era 34
+                    .lineToLinearHeading(new Pose2d(3,sign * 15, Math.toRadians(sign * (5)))) // era 34
                     .build();
             alignWithWall4 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub3.end())
@@ -189,7 +201,7 @@ public class SelectionCaseRedBag {
                     .addTemporalMarker(1.8, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .build();
             enterWarehouse = auto.getMecanumDrive()
-                    .trajectoryBuilder(alignWithWall.end())
+                    .trajectorySequenceBuilder(alignWithWall.end())
                     .forward(25)
                     .build();
             parkingSoft = auto.getMecanumDrive()
@@ -208,7 +220,7 @@ public class SelectionCaseRedBag {
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), true);
             auto.getMecanumDrive().followTrajectory(alignWithWall);
             //auto.sleep(50);
-            auto.getMecanumDrive().followTrajectory(enterWarehouse);
+            auto.getMecanumDrive().followTrajectorySequence(enterWarehouse);
             //auto.sleep(100);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), false);
             auto.getMecanumDrive().followTrajectory(exitWarehouse);
@@ -225,7 +237,7 @@ public class SelectionCaseRedBag {
             auto.sleep(250);
             auto.getMecanumDrive().followTrajectory(alignWithWall);
             //auto.sleep(50);
-            auto.getMecanumDrive().followTrajectory(enterWarehouse);
+            auto.getMecanumDrive().followTrajectorySequence(enterWarehouse);
             //auto.sleep(100);
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), false);
             auto.getMecanumDrive().followTrajectory(exitWarehouse);
@@ -267,7 +279,7 @@ public class SelectionCaseRedBag {
             AutoUtil.setClawOpen(auto.getRobot(), auto.getRobot().getExcavator(), true);
             auto.sleep(500);
             auto.getMecanumDrive().followTrajectory(alignWithWall);
-            auto.getMecanumDrive().followTrajectory(enterWarehouse);
+            auto.getMecanumDrive().followTrajectorySequence(enterWarehouse);
             auto.getMecanumDrive().followTrajectorySequence(parkingSoft);
         }
     }
