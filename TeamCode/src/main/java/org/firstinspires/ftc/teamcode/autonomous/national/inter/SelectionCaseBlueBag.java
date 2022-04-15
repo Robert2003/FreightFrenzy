@@ -78,7 +78,7 @@ public class SelectionCaseBlueBag {
         } else if(teamCompatible == TeamCompatible.BAG_UN_CARRY) {
             deliverPreloadBox = auto.getMecanumDrive()
                     .trajectoryBuilder(new Pose2d())
-                    .lineToLinearHeading(new Pose2d( 18, sign * 23, Math.toRadians(sign * (7))))
+                    .lineToLinearHeading(new Pose2d( 18, sign * 23, Math.toRadians(sign * (0))))
                     .build();
             alignWithWall = auto.getMecanumDrive()
                     .trajectoryBuilder(deliverPreloadBox.end())
@@ -100,7 +100,7 @@ public class SelectionCaseBlueBag {
                     .build();
             goToShippingHub = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse.end())
-                    .lineToLinearHeading(new Pose2d(17,sign * 18, Math.toRadians(sign * (10))))
+                    .lineToLinearHeading(new Pose2d(17,sign * 14, Math.toRadians(sign * (5))))
                     .build();
             alignWithWall2 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub.end())
@@ -150,7 +150,7 @@ public class SelectionCaseBlueBag {
                     .build();
             goToShippingHub3 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse3.end())
-                    .lineToLinearHeading(new Pose2d(3,sign * 15, Math.toRadians(sign * (5)))) // era 34
+                    .lineToLinearHeading(new Pose2d(3,sign * 11, Math.toRadians(sign * 0))) // era 34
                     .build();
             alignWithWall4 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub3.end())
