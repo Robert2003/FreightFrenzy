@@ -12,7 +12,7 @@ public class RobotDefinition {
     DcMotorEx armMotor, plateMotor, flyWheel;
     Servo excavator;
 
-    int zeroArm = 15;
+    int zeroArm = 14;
 
     float excavatorOpen = .47f, excavatorClosed = .63f;
 

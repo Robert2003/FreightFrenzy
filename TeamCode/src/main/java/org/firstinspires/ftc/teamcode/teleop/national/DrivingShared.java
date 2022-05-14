@@ -138,6 +138,7 @@ public class DrivingShared extends LinearOpMode {
             swp *= .3;
 
         if(!sharedControls) {
+            ms = .8f;
             mecanumDrive.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.right_stick_y * swp * ms,

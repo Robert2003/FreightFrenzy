@@ -86,14 +86,14 @@ public class SelectionCaseRedBag {
             alignWithWall = auto.getMecanumDrive()
                     .trajectoryBuilder(deliverPreloadBox.end())
                     .lineToLinearHeading(new Pose2d(-2,sign * -2, Math.toRadians(sign * (-90))))
-                    .addTemporalMarker(.37, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1100))
+                    .addTemporalMarker(.29, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),1100))
                     .addTemporalMarker(1.8, () -> AutoUtil.armToPosition(auto.getRobot().getArmMotor(),auto.getRobot().getZeroArm()))
                     .build();
             enterWarehouse = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall.end())
                     .forward(22)
                     .forward(12,
-                            SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getVelocityConstraint(16, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .build();
             exitWarehouse = auto.getMecanumDrive()
@@ -103,7 +103,7 @@ public class SelectionCaseRedBag {
                     .build();
             goToShippingHub = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse.end())
-                    .lineToLinearHeading(new Pose2d(17,sign * 14, Math.toRadians(sign * (5))))
+                    .lineToLinearHeading(new Pose2d(17,sign * 17, Math.toRadians(sign * (5))))
                     .build();
             alignWithWall2 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub.end())
@@ -117,7 +117,7 @@ public class SelectionCaseRedBag {
                     .turn(Math.toRadians(sign * (10)))
                     .forward(22)
                     .forward(7,
-                            SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getVelocityConstraint(16, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .build();
             exitWarehouse2 = auto.getMecanumDrive()
@@ -128,7 +128,7 @@ public class SelectionCaseRedBag {
                     .build();
             goToShippingHub2 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse2.end())
-                    .lineToLinearHeading(new Pose2d(12,sign * 18, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(12,sign * 21, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall3 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub2.end())
@@ -142,7 +142,7 @@ public class SelectionCaseRedBag {
                     .turn(Math.toRadians(sign * (10)))
                     .forward(22)
                     .forward(7,
-                            SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getVelocityConstraint(16, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                     .build();
             exitWarehouse3 = auto.getMecanumDrive()
@@ -153,7 +153,7 @@ public class SelectionCaseRedBag {
                     .build();
             goToShippingHub3 = auto.getMecanumDrive()
                     .trajectoryBuilder(exitWarehouse3.end())
-                    .lineToLinearHeading(new Pose2d(3,sign * 11, Math.toRadians(sign * (0)))) // era 34
+                    .lineToLinearHeading(new Pose2d(3,sign * 14, Math.toRadians(sign * (0)))) // era 34
                     .build();
             alignWithWall4 = auto.getMecanumDrive()
                     .trajectoryBuilder(goToShippingHub3.end())
@@ -164,8 +164,9 @@ public class SelectionCaseRedBag {
             parkingSoft = auto.getMecanumDrive()
                     .trajectorySequenceBuilder(alignWithWall4.end())
                     .strafeRight(sign * 4)
-                    .forward(37)
+                    .forward(39)
                     .strafeLeft(sign * 30)
+                    .forward(4)
                     .build();
         } else if(teamCompatible == TeamCompatible.NONE) {
             deliverPreloadBox = auto.getMecanumDrive()
